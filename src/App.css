@@ -1,22 +1,202 @@
-.App {
-  text-align: center;
+html,
+body,
+#root {
+    height: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
+h1 {
+    font-size: 3em;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+hr {
+    margin-top: 2em;
+    margin-bottom: 2em;
 }
 
-.App-link {
-  color: #09d3ac;
+nav {
+    z-index: 100;
+}
+
+.movies-category i {
+    font-size: 0.9em !important;
+}
+
+.navbar-header a,
+.navbar-header i {
+    transition: 0.3s all;
+}
+
+.navbar-header:hover a,
+.navbar-header:hover i {
+    color: #eee !important;
+}
+
+.nav-logo {
+    font-size: 2em;
+    margin-right: 0.5em;
+}
+
+.container {
+    max-width: 1260px;
+}
+
+.center-container {
+    position: absolute;
+    height: 100vh;
+    max-width: 1260px;
+    top: 0;
+    place-items: center center;
+    align-items: center;
+    justify-content: center;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.movie-row {
+    box-shadow: 0 1px 40px rgba(27, 6, 65, 0.1);
+    padding: 2em 1em;
+    background: rgba(255, 255, 255, 0.03);
+    margin-left: -12px;
+    border-radius: 5px;
+}
+
+.movie-row div {
+    margin: auto 0px;
+}
+
+.movie-desc {
+    font-size: 1.6em;
+    font-weight: 300;
+    line-height: 1.3em;
+}
+
+.movie-icon {
+    font-weight: 300;
+    font-size: 1.3em;
+}
+
+.movie-back-btn {
+    text-align: start;
+    padding-left: 0;
+    font-size: 1.6em;
+    color: #f8f9fa;
+    transition: 0.3s all;
+}
+
+.movie-imdb-link {
+    text-decoration: underline;
+    font-weight: 400;
+    color: #f8f9fa;
+    transition: 0.3s all;
+}
+
+.movie-back-btn:hover,
+.movie-imdb-link:hover {
+    color: #f8f9fa63 !important;
+}
+
+.inline-heading h1,
+.inline-heading h4 {
+    display: inline;
+}
+
+.inline-heading h4 {
+    padding-left: 0.5em;
+}
+
+ul {
+    list-style: none;
+}
+
+#movies img,
+#movie img {
+    width: 100%;
+}
+.brand-text {
+    font-size: 2rem;
+}
+#react-logo {
+    color: #00d8ff;
+}
+#imdb-logo {
+    color: #f5de50;
+}
+
+.bg-black {
+    background-color: black;
+}
+
+.text-black {
+    color: #000 !important;
+}
+
+.text-light-transp {
+    color: rgba(226, 226, 226, 0.65) !important;
+}
+
+.text-light-transp-2 {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.text-light-transp-3 {
+    color: rgba(226, 226, 226, 0.2) !important;
+}
+
+.font-weight-extra-light {
+    font-weight: 200;
+}
+
+input.form-control {
+    font-size: 1.4em;
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.04);
+    border: 2px solid #ddd;
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+input.form-control:focus {
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.04);
+    border: 2px solid #555;
+    border-radius: 5px;
+    outline: 0;
+}
+
+.search-btn {
+    background: #cb1a23;
+    color: rgb(255, 255, 255) !important;
+    font-size: 1.5em;
+    font-weight: 400;
+    border: 0;
+    border-radius: 3px;
+    padding: 0.3em 1.5em 0.32em;
+    letter-spacing: 1px;
+    transition: 0.4s all;
+    text-transform: uppercase;
+}
+
+.search-btn:hover {
+    color: rgba(227, 227, 227, 0.85) !important;
+    background: #cb1a239e;
+}
+
+.search-btn:focus {
+    outline: none;
+}
+
+.sticky-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+@media (min-width: 960px) {
+    #movies .col-md-3 .well {
+        height: 390px;
+    }
+
+    #movies .col-md-3 img {
+        height: 240px;
+    }
 }
