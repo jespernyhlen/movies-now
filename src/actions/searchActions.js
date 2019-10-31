@@ -11,7 +11,11 @@ import {
 } from './types';
 import axios from 'axios';
 
-import { APIKey } from '../APIKey';
+// import { APIKey } from '../APIKey';
+const apiURL =
+    process.env.NODE_ENV === 'development'
+        ? 'http://localhost:1448/'
+        : 'https://movie-api.jespernyhlenjs.me/';
 
 export const searchMovie = text => dispatch => {
     dispatch({
@@ -30,7 +34,7 @@ export const setFilters = filters => dispatch => {
 export const fetchMovies = (text, id, filters) => dispatch => {
     let query = text || '';
     let pageId = id || 1;
-    let url = `http://localhost:1448/movies?search=${query}&page=${pageId}&per_page=21`;
+    let url = `${apiURL}movies?search=${query}&page=${pageId}&per_page=21`;
     if (text) {
         if (filters && filters.yearFilter.length) {
             url =
@@ -79,7 +83,7 @@ export const fetchMovies = (text, id, filters) => dispatch => {
 
 export const fetchMovie = id => dispatch => {
     axios
-        .get(`http://localhost:1448/movies?id=${id}`)
+        .get(`${apiURL}movies?id=${id}`)
         .then(response =>
             dispatch({
                 type: FETCH_MOVIE,
@@ -105,7 +109,7 @@ export const fetchMovie = id => dispatch => {
 
 export const fetchLatest = id => dispatch => {
     axios
-        .get(`http://localhost:1448/movies?latest=true&page=${id}&per_page=21`)
+        .get(`${apiURL}movies?latest=true&page=${id}&per_page=21`)
         .then(response => {
             dispatch({
                 type: FETCH_LATEST,

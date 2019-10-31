@@ -6,16 +6,15 @@ import {
     Redirect,
     Switch
 } from 'react-router-dom';
-
 import './App.css';
 
 import NavBar from './components/layout/NavBar';
 import Footer from './components/layout/Footer';
-
 import Landing from './components/home/Landing';
 import Movie from './components/home/Movie';
 
 import store from './store';
+require('dotenv').config();
 
 class App extends Component {
     render() {
