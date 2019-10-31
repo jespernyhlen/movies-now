@@ -5,7 +5,10 @@ import { connect } from 'react-redux';
 import { setPathname } from '../../actions/searchActions';
 
 import SearchForm from './SearchForm';
+import Filter from './Filter';
+
 import MoviesContainer from './MoviesContainer';
+import Pagination from './Pagination';
 
 class Landing extends Component {
     componentDidUpdate() {
@@ -15,15 +18,18 @@ class Landing extends Component {
         let pathname = this.props.location.pathname;
         return (
             <div className='container' style={{ margin: '0 auto 6em' }}>
-                <SearchForm />
+                <Filter />
+                <SearchForm id={this.props.match.params.id} />
                 <MoviesContainer path={pathname} />
+                <Pagination totalPages={this.props.totalPages} />
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    pathname: state.movies.pathname
+    pathname: state.movies.pathname,
+    totalPages: state.movies.totalPages
 });
 
 export default connect(

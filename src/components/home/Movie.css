@@ -11,14 +11,14 @@ hr.text-line {
 }
 
 .movies-bg-img {
-    filter: blur(20px);
-    height: 100%;
+    filter: blur(16px);
+    height: 140%;
     width: 100%;
-    top: -50%;
+    top: -44%;
     left: 0;
     position: absolute;
     z-index: -1;
-    transform: scale(1.1);
+    transform: scale(1.4);
 }
 
 .movies-bg {
@@ -62,6 +62,7 @@ hr.text-line {
 .movie-card-img {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     min-height: 270px;
+    background: #00000026;
 }
 
 .movie-card-info {
@@ -101,8 +102,19 @@ hr.text-line {
 }
 
 .movie-card-container .mt-2 {
-    margin-top: 0.7rem !important;
-    */margin-top: 0.7rem !important;
+    /* margin-top: 0.7rem !important; */
+    /*margin-top: 0.7rem !important;
     /* text-align: left !important; */
-    padding-left: 0.5em;
+    /* padding-left: 0.5em; */
+    /* margin-top: -3rem !important;
+    position: absolute;
+    text-align: center !important;
+    background: #000;
+    padding: 0.5em;
+    margin: 0 10%;
+    left: 0;
+    right: 0;
+    text-shadow: 1px 1px 1px #464646;
+    border-radius: 4px;
+    color: #ddd !important; */
 }

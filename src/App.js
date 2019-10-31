@@ -22,22 +22,20 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <Router>
-                    <div>
-                        <NavBar />
-                        <Switch>
-                            <Route exact path='/'>
-                                <Redirect from='/' to='/latest' />
-                            </Route>
-                            <Route exact path='/latest' component={Landing} />
-                            <Route exact path='/search' component={Landing} />
+                    <NavBar />
+                    <Switch>
+                        <Route exact path='/'>
+                            <Redirect from='/' to='/latest/1' />
+                        </Route>
+                        <Route exact path='/latest/:page' component={Landing} />
+                        <Route exact path='/search/:id' component={Landing} />
 
-                            <Route exact path='/movie/:id' component={Movie} />
-                            <Route path='/'>
-                                <Redirect from='/' to='/latest' />
-                            </Route>
-                        </Switch>
-                        <Footer />
-                    </div>
+                        <Route exact path='/movie/:id' component={Movie} />
+                        <Route path='/'>
+                            <Redirect from='/' to='/latest' />
+                        </Route>
+                    </Switch>
+                    <Footer />
                 </Router>
             </Provider>
         );

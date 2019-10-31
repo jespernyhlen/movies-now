@@ -3,27 +3,36 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import MovieCard from './MovieCard';
-import Spinner from '../layout/Spinner';
 
-export class MoviesContainer extends Component {
+class MoviesContainer extends Component {
     render() {
-        const { movies } = this.props;
-        const { loading } = this.props;
+        const { movies, loading, pathname, filterActive } = this.props;
 
         const capitalize = s => {
             if (typeof s !== 'string') return '';
             return s.charAt(0).toUpperCase() + s.slice(1);
         };
 
-        let pathName = this.props.path.substring(1);
-        // console.log(pathName);
+        let pathSplit = pathname.split('/');
+        let currentPath = pathSplit[1];
+        // console.log(currentPath);
 
         let content = '';
         content =
             movies.length > 0
                 ? movies.map((movie, index) =>
                       movie.poster_path ? (
-                          <MovieCard key={index} movie={movie} />
+                          loading ? (
+                              <div
+                                  key={index}
+                                  id='loading-bar-spinner'
+                                  className='spinner'
+                              >
+                                  <div className='spinner-icon'></div>
+                              </div>
+                          ) : (
+                              <MovieCard key={index} movie={movie} />
+                          )
                       ) : null
                   )
                 : null;
@@ -40,14 +49,20 @@ export class MoviesContainer extends Component {
                 </div>
                 <div className='row'>
                     <div className='col-md-2 text-light mb-3 movies-category'>
-                        <i class='fas fa-angle-right'></i>{' '}
-                        {capitalize(pathName)}
+                        <i className='fas fa-angle-right'></i>{' '}
+                        {capitalize(currentPath)}
                     </div>
                 </div>
 
                 <div className='movies-bg'></div>
 
-                <div className='row'>{loading ? <Spinner /> : content}</div>
+                <div
+                    className={`row ${
+                        filterActive === true ? 'filter-active-blur' : ''
+                    }`}
+                >
+                    {content}
+                </div>
             </React.Fragment>
         );
     }
@@ -55,7 +70,9 @@ export class MoviesContainer extends Component {
 
 const mapStateToProps = state => ({
     movies: state.movies.movies,
-    loading: state.movies.loading
+    loading: state.movies.loading,
+    pathname: state.movies.pathname,
+    filterActive: state.movies.filterActive
 });
 
 export default connect(mapStateToProps)(MoviesContainer);
