@@ -6,22 +6,32 @@ import { connect } from 'react-redux';
 
 import {
     fetchMovie,
-    setLoading,
+    resetMovie,
     setMovieActive
 } from '../../actions/searchActions';
 
 class Movie extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { image1Loaded: false, image2Loaded: false };
+    }
+    handleImage1Loaded() {
+        this.setState({ image1Loaded: true });
+    }
+    handleImage2Loaded() {
+        this.setState({ image2Loaded: true });
+    }
     componentDidMount() {
         this.props.fetchMovie(this.props.match.params.id);
-        this.props.setLoading();
         this.props.setMovieActive(true);
     }
     componentWillUnmount() {
         this.props.setMovieActive(false);
+        this.props.resetMovie();
     }
 
     render() {
-        const { loading, movie, pathname } = this.props;
+        const { movie, pathname } = this.props;
         let genreString = '';
 
         if (movie.genres) {
@@ -32,7 +42,7 @@ class Movie extends Component {
 
         return (
             <React.Fragment>
-                {loading ? (
+                {!movie.original_title ? (
                     <div id='loading-bar-spinner' className='spinner'>
                         <div className='spinner-icon'></div>
                     </div>
@@ -47,15 +57,24 @@ class Movie extends Component {
                         >
                             <div className='row center-container'>
                                 <div className='row movie-row'>
-                                    <div className='col-md-4'>
+                                    <div
+                                        className={
+                                            !this.state.image2Loaded
+                                                ? 'col-md-4 movie-transition'
+                                                : 'col-md-4'
+                                        }
+                                    >
                                         <img
-                                            src={
-                                                movie.poster_path
-                                                    ? 'https://image.tmdb.org/t/p/w400/' +
-                                                      movie.poster_path
-                                                    : 'https://image.tmdb.org/t/p/w400//3Kgu3ys6W6UZWWFty7rlTWgST63.jpg'
+                                            onLoad={() =>
+                                                this.setState({
+                                                    image2Loaded: true
+                                                })
                                             }
                                             className='thumbnail w-100'
+                                            src={
+                                                'https://image.tmdb.org/t/p/w400/' +
+                                                movie.poster_path
+                                            }
                                             alt='Poster'
                                         />
                                     </div>
@@ -145,13 +164,20 @@ class Movie extends Component {
                         </div>
                     </div>
                 )}
-                <div className='movie-bg-container'>
+                <div
+                    className={
+                        !this.state.image1Loaded
+                            ? 'movie-bg-container movie-transition'
+                            : 'movie-bg-container'
+                    }
+                >
                     <img
                         id='main-background'
+                        onLoad={() => this.setState({ image1Loaded: true })}
                         src={
-                            loading
-                                ? 'https://image.tmdb.org/t/p/w300//3Kgu3ys6W6UZWWFty7rlTWgST63.jpg'
-                                : 'https://image.tmdb.org/t/p/w400/' +
+                            !movie.original_title
+                                ? null
+                                : 'https://image.tmdb.org/t/p/w200/' +
                                   (movie.backdrop_path
                                       ? movie.backdrop_path
                                       : movie.poster_path)
@@ -167,12 +193,11 @@ class Movie extends Component {
 }
 
 const mapStateToProps = state => ({
-    loading: state.movies.loading,
     movie: state.movies.movie,
     pathname: state.movies.pathname
 });
 
 export default connect(
     mapStateToProps,
-    { fetchMovie, setLoading, setMovieActive }
+    { fetchMovie, setMovieActive, resetMovie }
 )(Movie);

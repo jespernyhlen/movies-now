@@ -22,25 +22,6 @@ class MoviesContainer extends Component {
         let currentPath = pathSplit[1];
         // console.log(currentPath);
 
-        let content = '';
-        content =
-            movies.length > 0
-                ? movies.map((movie, index) =>
-                      movie.poster_path ? (
-                          loading ? (
-                              <div
-                                  key={index}
-                                  id='loading-bar-spinner'
-                                  className='spinner'
-                              >
-                                  <div className='spinner-icon'></div>
-                              </div>
-                          ) : (
-                              <MovieCard key={index} movie={movie} />
-                          )
-                      ) : null
-                  )
-                : null;
         return (
             <React.Fragment>
                 <div className='movie-bg-container'>
@@ -52,7 +33,7 @@ class MoviesContainer extends Component {
                         alt='background'
                     />
                 </div>
-                <div className='row'>
+                <div style={{ padding: '0 1vw' }} className='row'>
                     <div className='col-md-2 text-light mb-3 movies-category'>
                         <i className='fas fa-angle-right'></i>{' '}
                         {capitalize(currentPath)}
@@ -62,12 +43,37 @@ class MoviesContainer extends Component {
                 <div className='movies-bg'></div>
 
                 <div
-                    style={{ padding: '0 1em' }}
+                    style={{ padding: '0 1vw' }}
                     className={`row ${
-                        filterActive === true ? 'filter-active-blur' : ''
+                        filterActive ? 'filter-active-blur' : ''
                     }`}
                 >
-                    {content}
+                    {movies.length > 0
+                        ? movies.map((movie, index) =>
+                              movie.poster_path ? (
+                                  loading ? (
+                                      <React.Fragment key={'fragment' + index}>
+                                          <div
+                                              key={index - 10}
+                                              id='loading-bar-spinner'
+                                              className='spinner'
+                                          >
+                                              <div className='spinner-icon'></div>
+                                          </div>
+                                          <MovieCard
+                                              key={index}
+                                              movie={movie}
+                                          />
+                                      </React.Fragment>
+                                  ) : (
+                                      <MovieCard
+                                          key={index + 1}
+                                          movie={movie}
+                                      />
+                                  )
+                              ) : null
+                          )
+                        : null}
                 </div>
             </React.Fragment>
         );

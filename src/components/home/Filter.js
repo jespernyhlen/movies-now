@@ -37,7 +37,6 @@ class Filter extends Component {
         if (!this.props.text) {
             this.props.searchMovie(' ');
         }
-
         this.props.history.push('/search/1');
         // this.props.setLoading();
     };

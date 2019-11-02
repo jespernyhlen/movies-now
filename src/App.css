@@ -268,13 +268,13 @@ input.form-control:focus {
     margin-top: -20px;
     position: absolute;
     z-index: 19 !important;
-    animation: loading-bar-spinner 400ms linear infinite;
+    animation: loading-bar-spinner 300ms linear infinite;
 }
 
 #loading-bar-spinner.spinner .spinner-icon {
     width: 40px;
     height: 40px;
-    border: solid 4px transparent;
+    border: solid 5px transparent;
     border-top-color: #00c8b1 !important;
     border-left-color: #00c8b1 !important;
     border-radius: 50%;

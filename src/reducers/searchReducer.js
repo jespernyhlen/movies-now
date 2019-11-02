@@ -2,6 +2,7 @@ import {
     SEARCH_MOVIE,
     FETCH_MOVIES,
     FETCH_MOVIE,
+    RESET_MOVIE,
     FETCH_LATEST,
     LOADING,
     FIRSTLOAD,
@@ -49,6 +50,11 @@ export default function(state = initialState, action) {
                 ...state,
                 movie: action.payload.data,
                 loading: false
+            };
+        case RESET_MOVIE:
+            return {
+                ...state,
+                movie: []
             };
         case FETCH_LATEST:
             return {

@@ -2,6 +2,7 @@ import {
     SEARCH_MOVIE,
     FETCH_MOVIES,
     FETCH_MOVIE,
+    RESET_MOVIE,
     FETCH_LATEST,
     LOADING,
     FIRSTLOAD,
@@ -19,7 +20,6 @@ const apiURL =
         : 'https://movie-api.jespernyhlenjs.me/';
 
 export const searchMovie = text => dispatch => {
-    let searchQuery = text ? text : '!';
     dispatch({
         type: SEARCH_MOVIE,
         payload: text
@@ -33,11 +33,14 @@ export const setFilters = filters => dispatch => {
     });
 };
 
-export const fetchMovies = (text, id, filters) => dispatch => {
-    console.log(text);
+export const resetMovie = () => dispatch => {
+    dispatch({
+        type: RESET_MOVIE
+    });
+};
 
+export const fetchMovies = (text, id, filters) => dispatch => {
     let query = text || ' ';
-    console.log(query);
     let pageId = id || 1;
     let url = `${apiURL}movies?search=${query}&page=${pageId}&per_page=24`;
     if (text) {

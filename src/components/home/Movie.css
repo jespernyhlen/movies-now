@@ -1,8 +1,8 @@
 .movies-category {
     font-size: 2em;
     letter-spacing: 1px;
-    /* border-bottom: 3px solid #ffffff96; */
     padding-bottom: 8px;
+    padding-left: 5px;
 }
 
 hr.text-line {
@@ -38,6 +38,23 @@ hr.text-line {
     position: fixed;
     left: 0;
     z-index: -1;
+    transition: 0.6s all;
+}
+
+.movie-bg-container.movie-transition {
+    /* opacity: 1;
+    left: 0em; */
+    opacity: 0.5;
+    left: -5em;
+}
+
+.movie-row .col-md-4 {
+    transition: 1s all;
+}
+
+.col-md-4.movie-transition {
+    opacity: 0;
+    left: 10em;
 }
 
 /* .movie-bg-container .row {
@@ -87,6 +104,8 @@ hr.text-line {
     transition: 0.3s all;
     padding-left: 5px !important;
     padding-right: 5px !important;
+    opacity: 1;
+    left: 0;
 }
 
 .movie-card-container:hover {

@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import Select from 'react-select';
 import { connect } from 'react-redux';
@@ -7,8 +7,6 @@ import './select.css';
 
 class GenreSelect extends Component {
     render() {
-        let handleSelect = e => {};
-
         let colourStyles = {
             control: styles => ({ ...styles, backgroundColor: 'white' }),
             option: (styles, { isDisabled, isFocused }) => {
