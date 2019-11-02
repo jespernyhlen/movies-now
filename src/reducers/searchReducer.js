@@ -7,6 +7,7 @@ import {
     FIRSTLOAD,
     PATHNAME,
     FILTERACTIVE,
+    MOVIEACTIVE,
     SET_FILTERS
 } from '../actions/types';
 
@@ -18,6 +19,7 @@ const initialState = {
     pathname: '',
     totalPages: null,
     filterActive: false,
+    movieActive: false,
     movie: [],
     filters: {
         yearFilter: [],
@@ -81,6 +83,11 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 filterActive: action.payload
+            };
+        case MOVIEACTIVE:
+            return {
+                ...state,
+                movieActive: action.payload
             };
         default:
             return state;

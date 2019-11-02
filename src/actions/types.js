@@ -7,4 +7,5 @@ export const LOADING = 'LOADING';
 export const FIRSTLOAD = 'FIRSTLOAD';
 export const PATHNAME = 'PATHNAME';
 export const FILTERACTIVE = 'FILTERACTIVE';
+export const MOVIEACTIVE = 'MOVIEACTIVE';
 export const SET_FILTERS = 'SET_FILTERS';

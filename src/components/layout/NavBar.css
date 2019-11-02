@@ -18,8 +18,9 @@ nav {
     width: 100%;
     top: 0;
     height: 4.35em;
-    background: #000000a3;
+    background: #000000a3 !important;
     z-index: 800;
+    transition: 0.3s all;
 }
 
 .navbar-header {
@@ -27,7 +28,7 @@ nav {
 }
 
 .movies-filter-btn {
-    background: #f90f1c73;
+    /* background: #f90f1c73; */
     color: rgba(255, 255, 255, 0.77) !important;
     font-size: 1.3em;
     font-weight: 400;
@@ -42,6 +43,6 @@ nav {
 }
 
 .movies-filter-btn:hover {
-    color: rgba(227, 227, 227, 0.85) !important;
-    background: #cb1a239e;
+    color: #fff !important;
+    /* background: #cb1a239e; */
 }

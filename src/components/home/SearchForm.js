@@ -8,7 +8,8 @@ import {
     fetchMovies,
     fetchLatest,
     setLoading,
-    setFirstload
+    setFirstload,
+    setFilters
 } from '../../actions/searchActions';
 
 class SearchForm extends Component {
@@ -34,24 +35,24 @@ class SearchForm extends Component {
             case 'latest':
                 if (path !== prevPath) {
                     this.fetchLatest(this.props.match.params.page);
+
                     this.props.setLoading();
                 }
+
                 break;
             case 'search':
                 // this.props.setLoading();
                 if (!this.props.text) {
                     this.props.history.push('/latest/1');
                 }
-                if (prevPath !== path) {
-                    this.props.setLoading();
-                    console.log(this.props.filters);
-                    this.props.fetchMovies(
-                        this.props.text,
-                        this.props.id,
-                        this.props.filters
-                    );
-                }
-
+                //  else {
+                this.props.fetchMovies(
+                    this.props.text,
+                    this.props.id,
+                    this.props.filters
+                );
+                this.props.setLoading();
+                // }
                 break;
 
             default:
@@ -84,6 +85,7 @@ class SearchForm extends Component {
 const mapStateToProps = state => ({
     text: state.movies.text,
     firstload: state.movies.firstload,
+    filterActive: state.movies.filterActive,
     pathname: state.movies.pathname,
     filters: state.movies.filters
 });
@@ -91,7 +93,14 @@ const mapStateToProps = state => ({
 export default withRouter(
     connect(
         mapStateToProps,
-        { searchMovie, fetchMovies, fetchLatest, setLoading, setFirstload }
+        {
+            searchMovie,
+            fetchMovies,
+            fetchLatest,
+            setLoading,
+            setFirstload,
+            setFilters
+        }
     )(SearchForm)
 );
 

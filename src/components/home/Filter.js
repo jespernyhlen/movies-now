@@ -7,11 +7,12 @@ import VoteSlider from './../forms/VoteSlider';
 import { connect } from 'react-redux';
 import './Filter.css';
 import {
+    searchMovie,
     setFilters,
     fetchMovies,
-    setFilterActive
+    setFilterActive,
+    setLoading
 } from '../../actions/searchActions';
-let filterMessage = '';
 
 class Filter extends Component {
     constructor() {
@@ -19,25 +20,35 @@ class Filter extends Component {
         this.state = {
             yearFilter: [],
             voteFilter: [],
-            genreFilter: {}
+            genreFilter: {},
+            filterMessage: ''
         };
     }
 
     handleSubmit = e => {
         // console.log(this.state);
         this.props.setFilters(this.state);
+
         // console.log(this.state);
-        // console.log(this.props.filters);
-        this.applyFilterMessage('Filters applied');
+        this.applyFilterMessage('Filters changed');
+        this.props.fetchMovies(this.state.text, 1, this.state);
+
+        this.setState(this.state);
+        if (!this.props.text) {
+            this.props.searchMovie(' ');
+        }
+
+        this.props.history.push('/search/1');
         // this.props.setLoading();
-        console.log(this.props);
     };
+
     handleChange = (e, type) => {
         this.setState({
             [type]: e
         });
         // console.log(this.state);
     };
+
     componentDidMount() {
         this.setState({
             yearFilter: this.props.filters.yearFilter,
@@ -47,9 +58,13 @@ class Filter extends Component {
     }
 
     applyFilterMessage(message) {
-        filterMessage = message;
+        this.setState({
+            filterMessage: message
+        });
         const timer = setTimeout(() => {
-            filterMessage = '';
+            this.setState({
+                filterMessage: ''
+            });
         }, 1000);
     }
     render() {
@@ -80,20 +95,20 @@ class Filter extends Component {
                         <YearSlider onChange={this.handleChange} />
                         <VoteSlider onChange={this.handleChange} />
                         <GenreSelect onChange={this.handleChange} />
-                        {filterMessage ? (
+                        {this.state.filterMessage ? (
                             <p
                                 style={{
                                     color: 'rgb(238, 238, 238)',
                                     position: 'absolute',
                                     left: '0',
                                     right: '0',
-                                    fontSize: '1.2em',
+                                    fontSize: '0.8em',
                                     fontWeight: '300',
                                     letterSpacing: '0.5px',
-                                    marginTop: '0.5em'
+                                    marginTop: '1em'
                                 }}
                             >
-                                {filterMessage}
+                                {this.state.filterMessage}
                             </p>
                         ) : null}
                         <div className='filter-btn' onClick={this.handleSubmit}>
@@ -129,12 +144,14 @@ class Filter extends Component {
 const mapStateToProps = state => ({
     pathname: state.movies.pathname,
     filterActive: state.movies.filterActive,
-    filters: state.movies.filters
+    filters: state.movies.filters,
+    text: state.movies.text,
+    movies: state.movies.movies
 });
 
 export default withRouter(
     connect(
         mapStateToProps,
-        { setFilters, fetchMovies, setFilterActive }
+        { searchMovie, setFilters, setLoading, fetchMovies, setFilterActive }
     )(Filter)
 );

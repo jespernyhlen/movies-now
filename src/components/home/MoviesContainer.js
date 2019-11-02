@@ -5,6 +5,11 @@ import { connect } from 'react-redux';
 import MovieCard from './MovieCard';
 
 class MoviesContainer extends Component {
+    constructor() {
+        super();
+        this.state = {};
+    }
+
     render() {
         const { movies, loading, pathname, filterActive } = this.props;
 
@@ -42,7 +47,7 @@ class MoviesContainer extends Component {
                     <img
                         id='main-background'
                         src='
-                        https://image.tmdb.org/t/p/w300//zfE0R94v1E8cuKAerbskfD3VfUt.jpg'
+                        https://image.tmdb.org/t/p/w300//3Kgu3ys6W6UZWWFty7rlTWgST63.jpg'
                         className='movies-bg-img'
                         alt='background'
                     />
@@ -57,6 +62,7 @@ class MoviesContainer extends Component {
                 <div className='movies-bg'></div>
 
                 <div
+                    style={{ padding: '0 1em' }}
                     className={`row ${
                         filterActive === true ? 'filter-active-blur' : ''
                     }`}
@@ -72,7 +78,7 @@ const mapStateToProps = state => ({
     movies: state.movies.movies,
     loading: state.movies.loading,
     pathname: state.movies.pathname,
-    filterActive: state.movies.filterActive
+    filters: state.movies.filters
 });
 
 export default connect(mapStateToProps)(MoviesContainer);

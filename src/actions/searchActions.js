@@ -7,6 +7,7 @@ import {
     FIRSTLOAD,
     PATHNAME,
     FILTERACTIVE,
+    MOVIEACTIVE,
     SET_FILTERS
 } from './types';
 import axios from 'axios';
@@ -18,6 +19,7 @@ const apiURL =
         : 'https://movie-api.jespernyhlenjs.me/';
 
 export const searchMovie = text => dispatch => {
+    let searchQuery = text ? text : '!';
     dispatch({
         type: SEARCH_MOVIE,
         payload: text
@@ -32,9 +34,12 @@ export const setFilters = filters => dispatch => {
 };
 
 export const fetchMovies = (text, id, filters) => dispatch => {
-    let query = text || '';
+    console.log(text);
+
+    let query = text || ' ';
+    console.log(query);
     let pageId = id || 1;
-    let url = `${apiURL}movies?search=${query}&page=${pageId}&per_page=21`;
+    let url = `${apiURL}movies?search=${query}&page=${pageId}&per_page=24`;
     if (text) {
         if (filters && filters.yearFilter.length) {
             url =
@@ -109,7 +114,7 @@ export const fetchMovie = id => dispatch => {
 
 export const fetchLatest = id => dispatch => {
     axios
-        .get(`${apiURL}movies?latest=true&page=${id}&per_page=21`)
+        .get(`${apiURL}movies?latest=true&page=${id}&per_page=24`)
         .then(response => {
             dispatch({
                 type: FETCH_LATEST,
@@ -119,7 +124,7 @@ export const fetchLatest = id => dispatch => {
         })
         .catch(err => console.log(err));
 };
-
+// /discover/movie?sort_by=popularity.desc
 // export const fetchLatest = id => dispatch => {
 //     axios
 //         .get(
@@ -150,6 +155,13 @@ export const setFirstload = () => {
 export const setFilterActive = active => {
     return {
         type: FILTERACTIVE,
+        payload: active
+    };
+};
+
+export const setMovieActive = active => {
+    return {
+        type: MOVIEACTIVE,
         payload: active
     };
 };

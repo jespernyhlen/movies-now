@@ -1,5 +1,5 @@
 .filter-container {
-    background: #0c0315ed;
+    background: #000000f0;
     height: 100vh;
     width: 100%;
     padding: 5em 15px 2em;
@@ -9,7 +9,7 @@
     top: -100vh;
     transition: 0.5s all ease-in-out;
     margin-bottom: 0.75em;
-    z-index: 1;
+    z-index: 800;
     position: fixed;
 }
 

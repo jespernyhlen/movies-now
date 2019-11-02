@@ -27,25 +27,24 @@ class NavBar extends Component {
         this.setState({
             text: e.target.value
         });
+        if (e.target.value === '') {
+            this.props.searchMovie(' ');
+        } else {
+            this.props.searchMovie(e.target.value);
+        }
+
+        this.props.setLoading();
+        if (this.props.location.pathname !== '/search/1') {
+            this.props.history.push('/search/1');
+        }
     };
 
     onSubmit = e => {
         e.preventDefault();
-        this.props.searchMovie(this.state.text);
-        this.props.fetchMovies(
-            this.state.text,
-            this.props.id,
-            this.props.filters
-        );
-        this.props.setLoading();
-        this.setState({
-            text: ''
-        });
-        this.props.history.push('/search/1');
     };
 
     render() {
-        const { filterActive } = this.props;
+        const { filterActive, movieActive } = this.props;
 
         const onClick = e => {
             filterActive
@@ -53,8 +52,11 @@ class NavBar extends Component {
                 : this.props.setFilterActive(true);
         };
         return (
-            <nav className='navbar bg-transparent mb-5'>
-                <div className='container'>
+            <nav
+                style={{ marginTop: movieActive ? '-100px' : '0' }}
+                className='navbar bg-transparent mb-5'
+            >
+                <div style={{ maxWidth: '100vw' }} className='container'>
                     <div className='navbar-header'>
                         <i className='fas fa-film text-light-transp-2 nav-logo'></i>
                         <Link
@@ -101,7 +103,9 @@ class NavBar extends Component {
 
 const mapStateToProps = state => ({
     filterActive: state.movies.filterActive,
-    filters: state.movies.filters
+    movieActive: state.movies.movieActive,
+    filters: state.movies.filters,
+    text: state.movies.text
 });
 
 export default withRouter(

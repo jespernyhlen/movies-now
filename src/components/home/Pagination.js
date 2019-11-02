@@ -16,6 +16,7 @@ export class Pagination extends Component {
         let setPagination = () => {
             let paginationLinks = [];
             let pagesTotal = totalPages ? totalPages : 0;
+
             // let pages = pagesTotal > 10 ? 10 : pagesTotal;
             // for (i = 1; i < totalPages + 1; i++) {
             let nextPages;
@@ -114,7 +115,7 @@ export class Pagination extends Component {
                             {totalPages}
                         </h5>
                     </Link>
-                    {page !== pagesTotal ? (
+                    {page !== pagesTotal && pagesTotal !== 0 ? (
                         <Link
                             className={'paginate-more pagination-link '}
                             to={'/' + path + '/' + parseInt(page + 1)}

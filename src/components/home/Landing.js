@@ -17,8 +17,11 @@ class Landing extends Component {
     render() {
         let pathname = this.props.location.pathname;
         return (
-            <div className='container' style={{ margin: '0 auto 6em' }}>
-                <Filter />
+            <div
+                className='container'
+                style={{ margin: '0 auto 6em', maxWidth: '100vw' }}
+            >
+                <Filter onUpdate={this.onUpdate} />
                 <SearchForm id={this.props.match.params.id} />
                 <MoviesContainer path={pathname} />
                 <Pagination totalPages={this.props.totalPages} />

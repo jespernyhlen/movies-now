@@ -4,12 +4,20 @@ import './Movie.css';
 
 import { connect } from 'react-redux';
 
-import { fetchMovie, setLoading } from '../../actions/searchActions';
+import {
+    fetchMovie,
+    setLoading,
+    setMovieActive
+} from '../../actions/searchActions';
 
 class Movie extends Component {
     componentDidMount() {
         this.props.fetchMovie(this.props.match.params.id);
         this.props.setLoading();
+        this.props.setMovieActive(true);
+    }
+    componentWillUnmount() {
+        this.props.setMovieActive(false);
     }
 
     render() {
@@ -30,7 +38,13 @@ class Movie extends Component {
                     </div>
                 ) : (
                     <div>
-                        <div className='container'>
+                        <div
+                            className='container'
+                            style={{
+                                maxWidth: '1620px !important',
+                                background: '#000'
+                            }}
+                        >
                             <div className='row center-container'>
                                 <div className='row movie-row'>
                                     <div className='col-md-4'>
@@ -39,7 +53,7 @@ class Movie extends Component {
                                                 movie.poster_path
                                                     ? 'https://image.tmdb.org/t/p/w400/' +
                                                       movie.poster_path
-                                                    : 'https://image.tmdb.org/t/p/w200//zfE0R94v1E8cuKAerbskfD3VfUt.jpg'
+                                                    : 'https://image.tmdb.org/t/p/w400//3Kgu3ys6W6UZWWFty7rlTWgST63.jpg'
                                             }
                                             className='thumbnail w-100'
                                             alt='Poster'
@@ -81,27 +95,21 @@ class Movie extends Component {
                                             </div>
 
                                             <li className='row mt-5 text-light'>
-                                                <div className='col-md-3 movie-icon'>
+                                                <div className='col-md-2 movie-icon'>
                                                     <i className='far fa-clock text-primary'></i>{' '}
                                                     {movie.runtime
                                                         ? movie.runtime + ' min'
                                                         : ' ?'}
                                                 </div>
-                                                <div className='col-md-3 movie-icon'>
-                                                    <i className='far fa-comment text-success'></i>{' '}
-                                                    {movie.original_language
-                                                        ? movie.original_language.toUpperCase()
-                                                        : ' ?'}
-                                                </div>
 
-                                                <div className='col-md-3 movie-icon'>
+                                                <div className='col-md-2 movie-icon'>
                                                     <i className='fas fa-star text-warning'></i>{' '}
                                                     <strong>
                                                         {movie.vote_average}
                                                     </strong>{' '}
                                                     {' / ' + movie.vote_count}
                                                 </div>
-                                                <div className='col-md-3 movie-icon'>
+                                                <div className='col-md-2 movie-icon'>
                                                     <i className='fab fa-imdb text-warning'></i>{' '}
                                                     <a
                                                         href={
@@ -114,6 +122,12 @@ class Movie extends Component {
                                                     >
                                                         IMDB
                                                     </a>
+                                                </div>
+                                                <div className='col-md-2 movie-icon'>
+                                                    <i className='far fa-comment text-success'></i>{' '}
+                                                    {movie.original_language
+                                                        ? movie.original_language.toUpperCase()
+                                                        : ' ?'}
                                                 </div>
                                             </li>
                                             <Link
@@ -136,9 +150,11 @@ class Movie extends Component {
                         id='main-background'
                         src={
                             loading
-                                ? 'https://image.tmdb.org/t/p/w200//zfE0R94v1E8cuKAerbskfD3VfUt.jpg'
-                                : 'https://image.tmdb.org/t/p/w200/' +
-                                  movie.poster_path
+                                ? 'https://image.tmdb.org/t/p/w300//3Kgu3ys6W6UZWWFty7rlTWgST63.jpg'
+                                : 'https://image.tmdb.org/t/p/w400/' +
+                                  (movie.backdrop_path
+                                      ? movie.backdrop_path
+                                      : movie.poster_path)
                         }
                         className='movie-bg-img'
                         alt='background'
@@ -158,5 +174,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { fetchMovie, setLoading }
+    { fetchMovie, setLoading, setMovieActive }
 )(Movie);
