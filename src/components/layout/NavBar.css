@@ -5,11 +5,11 @@
 
 .navbar-header:hover a,
 .navbar-header:hover i {
-    color: #eee !important;
+    color: #fff !important;
 }
 
 .nav-logo {
-    font-size: 2em;
+    font-size: 1em;
     margin-right: 0.5em;
 }
 
@@ -18,9 +18,15 @@ nav {
     width: 100%;
     top: 0;
     height: 4.35em;
-    background: #000000a3 !important;
+    background: rgba(0, 0, 0, 0.92) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     z-index: 800;
+    transform: translateY(0em);
     transition: 0.3s all;
+}
+
+.hide-bar {
+    transform: translateY(-6em);
 }
 
 .navbar-header {
@@ -42,7 +48,74 @@ nav {
     cursor: pointer;
 }
 
+.movies-filter-btn {
+    transition: 0.2s all;
+}
+
 .movies-filter-btn:hover {
     color: #fff !important;
     /* background: #cb1a239e; */
+}
+
+@media (max-width: 790px) {
+    .navbar {
+        height: 3em;
+        padding: 1rem;
+    }
+
+    nav {
+        height: 4.35em;
+        background: rgba(0, 0, 0, 0.96) !important;
+    }
+
+    .navbar-header {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: 6em;
+    }
+
+    .brand-text {
+        font-size: 1.2rem;
+    }
+
+    #searchForm {
+        display: flex;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.96) !important;
+        right: 0;
+        left: 0;
+        position: absolute;
+        height: 3.3em;
+        padding: 0.2em 0.5em;
+        padding: 0.2em 0.5em;
+        top: 5px;
+    }
+
+    .movies-filter-btn {
+        font-size: 1.1em;
+        padding: 0.4em 0.3em 0.22em 0;
+        display: flex;
+        line-height: 1.65em;
+    }
+
+    .movies-filter-btn i {
+        padding: 0.5em 0.5em 0 0;
+    }
+
+    input.form-control {
+        border: 0;
+        background: rgba(187, 193, 191, 0.27);
+        height: 2.4em;
+        font-size: 1.1em;
+        max-width: 410px;
+        width: 60%;
+    }
+
+    .search-btn {
+        font-size: 1.2em;
+        padding: 0em 1em 0em;
+        height: 2.2em;
+    }
 }

@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-
 import MovieCard from './MovieCard';
 
 class MoviesContainer extends Component {
-    constructor() {
-        super();
-        this.state = {};
+    componentDidUpdate() {
+        window.scrollTo(0, 0);
     }
 
     render() {
@@ -21,22 +19,25 @@ class MoviesContainer extends Component {
         let pathSplit = pathname.split('/');
         let currentPath = pathSplit[1];
         // console.log(currentPath);
-
         return (
             <React.Fragment>
-                <div className='movie-bg-container'>
+                <div className='movie-bg-container '>
                     <img
                         id='main-background'
                         src='
-                        https://image.tmdb.org/t/p/w300//3Kgu3ys6W6UZWWFty7rlTWgST63.jpg'
+                        https://images.unsplash.com/photo-1462651567147-aa679fd1cfaf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1700&q=60'
                         className='movies-bg-img'
                         alt='background'
                     />
                 </div>
                 <div style={{ padding: '0 1vw' }} className='row'>
-                    <div className='col-md-2 text-light mb-3 movies-category'>
-                        <i className='fas fa-angle-right'></i>{' '}
-                        {capitalize(currentPath)}
+                    <div className='text-light mb-3 movies-category'>
+                        {loading ? null : (
+                            <div>
+                                <i className='fas fa-angle-right'></i>{' '}
+                                {capitalize(currentPath)}
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -44,33 +45,14 @@ class MoviesContainer extends Component {
 
                 <div
                     style={{ padding: '0 1vw' }}
-                    className={`row ${
+                    className={`movies-row row ${
                         filterActive ? 'filter-active-blur' : ''
                     }`}
                 >
-                    {movies.length > 0
+                    {!loading
                         ? movies.map((movie, index) =>
                               movie.poster_path ? (
-                                  loading ? (
-                                      <React.Fragment key={'fragment' + index}>
-                                          <div
-                                              key={index - 10}
-                                              id='loading-bar-spinner'
-                                              className='spinner'
-                                          >
-                                              <div className='spinner-icon'></div>
-                                          </div>
-                                          <MovieCard
-                                              key={index}
-                                              movie={movie}
-                                          />
-                                      </React.Fragment>
-                                  ) : (
-                                      <MovieCard
-                                          key={index + 1}
-                                          movie={movie}
-                                      />
-                                  )
+                                  <MovieCard key={index + 1} movie={movie} />
                               ) : null
                           )
                         : null}

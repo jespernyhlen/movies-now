@@ -29,18 +29,21 @@ class NavBar extends Component {
         });
         if (e.target.value === '') {
             this.props.searchMovie(' ');
-        } else {
-            this.props.searchMovie(e.target.value);
-        }
-
-        this.props.setLoading();
-        if (this.props.location.pathname !== '/search/1') {
-            this.props.history.push('/search/1');
+            this.props.searchMovie(this.state.text);
         }
     };
 
     onSubmit = e => {
         e.preventDefault();
+        if (e.target.value === '') {
+            this.props.searchMovie(' ');
+        } else {
+            this.props.searchMovie(this.state.text);
+        }
+        this.props.setLoading();
+        if (this.props.location.pathname !== '/search/1') {
+            this.props.history.push('/search/1');
+        }
     };
 
     render() {
@@ -53,16 +56,15 @@ class NavBar extends Component {
         };
         return (
             <nav
-                style={{ marginTop: movieActive ? '-100px' : '0' }}
-                className='navbar bg-transparent mb-5'
+                className={movieActive ? 'navbar mb-5 hide-bar' : 'navbar mb-5'}
             >
                 <div style={{ maxWidth: '100vw' }} className='container'>
                     <div className='navbar-header'>
-                        <i className='fas fa-film text-light-transp-2 nav-logo'></i>
                         <Link
                             className='navbar-brand text-light-transp-2 text-lg brand-text'
                             to='/latest/1'
                         >
+                            <i className='fas fa-film text-light-transp-2 nav-logo'></i>
                             MOVIES
                         </Link>
                     </div>

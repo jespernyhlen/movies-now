@@ -9,7 +9,8 @@ import {
     PATHNAME,
     FILTERACTIVE,
     MOVIEACTIVE,
-    SET_FILTERS
+    SET_FILTERS,
+    RESET_FILTERS
 } from '../actions/types';
 
 const initialState = {
@@ -26,7 +27,8 @@ const initialState = {
         yearFilter: [],
         voteFilter: [],
         genreFilter: {}
-    }
+    },
+    resetFilters: false
 };
 
 export default function(state = initialState, action) {
@@ -84,6 +86,11 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 pathname: action.payload
+            };
+        case RESET_FILTERS:
+            return {
+                ...state,
+                resetFilters: action.payload
             };
         case FILTERACTIVE:
             return {

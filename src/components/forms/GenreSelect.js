@@ -4,9 +4,42 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 
 import './select.css';
+import { setReset } from '../../actions/searchActions';
 
 class GenreSelect extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            select: {
+                value: this.props.filters.genreFilter.length
+                    ? this.props.filters.genreFilter
+                    : options[0], // "One" as initial value for react-select
+                options // all available options
+            }
+        };
+    }
+    setValue = value => {
+        this.setState(prevState => ({
+            select: {
+                ...prevState.select,
+                value
+            }
+        }));
+    };
+    handleChange = value => {
+        this.setValue(value);
+    };
+
+    componentDidUpdate() {
+        if (this.props.resetFilters) {
+            this.setValue(null);
+            this.props.setReset(false);
+        }
+    }
     render() {
+        const { select } = this.state;
+
         let colourStyles = {
             control: styles => ({ ...styles, backgroundColor: 'white' }),
             option: (styles, { isDisabled, isFocused }) => {
@@ -20,7 +53,10 @@ class GenreSelect extends Component {
             }
         };
         return (
-            <div style={{ maxWidth: '700px', margin: '2em auto 0' }}>
+            <div
+                id='genre-select'
+                style={{ maxWidth: '700px', margin: '2em auto 0' }}
+            >
                 <label
                     style={{
                         color: '#ccc',
@@ -33,16 +69,14 @@ class GenreSelect extends Component {
                 </label>
 
                 <Select
-                    className='genre-select'
-                    defaultValue={
-                        Object.keys(this.props.filters.genreFilter).length > 0
-                            ? this.props.filters.genreFilter
-                            : null
-                    }
                     styles={colourStyles}
-                    placeholder='Choose genre'
-                    options={genres}
-                    onChange={e => this.props.onChange(e, 'genreFilter')}
+                    className='genre-select'
+                    value={select.value}
+                    options={select.options}
+                    onChange={e => {
+                        this.handleChange(e);
+                        this.props.onChange(e, 'genreFilter');
+                    }}
                 />
                 <div></div>
             </div>
@@ -51,17 +85,13 @@ class GenreSelect extends Component {
 }
 
 const mapStateToProps = state => ({
-    filters: state.movies.filters
+    filters: state.movies.filters,
+    resetFilters: state.movies.resetFilters
 });
 
-export default withRouter(
-    connect(
-        mapStateToProps,
-        {}
-    )(GenreSelect)
-);
+export default withRouter(connect(mapStateToProps, { setReset })(GenreSelect));
 
-const genres = [
+const options = [
     {
         type: '',
         label: 'All'

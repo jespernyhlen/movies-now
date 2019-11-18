@@ -15,15 +15,10 @@ import {
 class SearchForm extends Component {
     componentDidMount() {
         this.props.setFirstload();
-        if (
-            !this.props.firstload ||
-            this.props.location.pathname.substring(1, 7) === 'latest'
-        ) {
+        if (!this.props.firstload) {
             this.fetchLatest(this.props.match.params.page);
-            this.props.setLoading();
         }
     }
-
     componentDidUpdate(prevProps) {
         let path = this.props.location.pathname;
         let prevPath = prevProps.pathname;
@@ -33,9 +28,8 @@ class SearchForm extends Component {
 
         switch (currentPath) {
             case 'latest':
-                if (path !== prevPath) {
+                if (path !== prevPath && prevPath !== '') {
                     this.fetchLatest(this.props.match.params.page);
-
                     this.props.setLoading();
                 }
 
@@ -43,8 +37,10 @@ class SearchForm extends Component {
             case 'search':
                 // this.props.setLoading();
                 if (!this.props.text) {
+                    this.fetchLatest(this.props.match.params.page);
                     this.props.history.push('/latest/1');
                 }
+
                 //  else {
                 this.props.fetchMovies(
                     this.props.text,
@@ -68,16 +64,9 @@ class SearchForm extends Component {
     render() {
         return (
             <div
-                className='jumbotron jumbotron-fluid mt-2 text-center'
-                style={{ background: 'none' }}
-            >
-                <div className='container'>
-                    <h1 className='display-4 mb-3 font-weight-extra-light text-light-transp-2'>
-                        <i className='fa fa-search' /> Search for movies, TV
-                        series..
-                    </h1>
-                </div>
-            </div>
+            // className='jumbotron jumbotron-fluid mt-2 text-center'
+            // style={{ background: 'none' }}
+            ></div>
         );
     }
 }
@@ -91,17 +80,14 @@ const mapStateToProps = state => ({
 });
 
 export default withRouter(
-    connect(
-        mapStateToProps,
-        {
-            searchMovie,
-            fetchMovies,
-            fetchLatest,
-            setLoading,
-            setFirstload,
-            setFilters
-        }
-    )(SearchForm)
+    connect(mapStateToProps, {
+        searchMovie,
+        fetchMovies,
+        fetchLatest,
+        setLoading,
+        setFirstload,
+        setFilters
+    })(SearchForm)
 );
 
 // import React, { Component } from 'react';

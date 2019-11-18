@@ -11,7 +11,8 @@ import {
     setFilters,
     fetchMovies,
     setFilterActive,
-    setLoading
+    setLoading,
+    setReset
 } from '../../actions/searchActions';
 
 class Filter extends Component {
@@ -20,32 +21,27 @@ class Filter extends Component {
         this.state = {
             yearFilter: [],
             voteFilter: [],
-            genreFilter: {},
-            filterMessage: ''
+            genreFilter: {}
         };
     }
 
     handleSubmit = e => {
-        // console.log(this.state);
         this.props.setFilters(this.state);
-
         // console.log(this.state);
-        this.applyFilterMessage('Filters changed');
         this.props.fetchMovies(this.state.text, 1, this.state);
-
         this.setState(this.state);
         if (!this.props.text) {
             this.props.searchMovie(' ');
         }
         this.props.history.push('/search/1');
-        // this.props.setLoading();
+        this.props.setLoading();
+        this.props.setFilterActive(false);
     };
 
     handleChange = (e, type) => {
         this.setState({
             [type]: e
         });
-        // console.log(this.state);
     };
 
     componentDidMount() {
@@ -56,16 +52,16 @@ class Filter extends Component {
         });
     }
 
-    applyFilterMessage(message) {
-        this.setState({
-            filterMessage: message
+    clearFilters() {
+        this.props.setReset(true);
+        this.props.setFilters({
+            yearFilter: [],
+            voteFilter: [],
+            genreFilter: {}
         });
-        const timer = setTimeout(() => {
-            this.setState({
-                filterMessage: ''
-            });
-        }, 1000);
+        this.setState({ state: this.state });
     }
+
     render() {
         const { filterActive } = this.props;
 
@@ -79,6 +75,7 @@ class Filter extends Component {
                 <div className='row center-filter'>
                     <div style={{ width: '100%' }}>
                         <p
+                            className='center-filter-header'
                             style={{
                                 color: 'rgb(238, 238, 238)',
                                 position: 'absolute',
@@ -91,36 +88,43 @@ class Filter extends Component {
                         >
                             Apply filters to limit your next search
                         </p>
-                        <YearSlider onChange={this.handleChange} />
-                        <VoteSlider onChange={this.handleChange} />
-                        <GenreSelect onChange={this.handleChange} />
-                        {this.state.filterMessage ? (
-                            <p
-                                style={{
-                                    color: 'rgb(238, 238, 238)',
-                                    position: 'absolute',
-                                    left: '0',
-                                    right: '0',
-                                    fontSize: '0.8em',
-                                    fontWeight: '300',
-                                    letterSpacing: '0.5px',
-                                    marginTop: '1em'
+                        <React.Fragment>
+                            <YearSlider onChange={this.handleChange} />
+                            <VoteSlider onChange={this.handleChange} />
+                            <GenreSelect onChange={this.handleChange} />
+                        </React.Fragment>
+
+                        <div
+                            className='filter-btn-container'
+                            style={{
+                                maxWidth: '700px',
+                                margin: '0 auto',
+                                display: 'flex',
+                                justifyContent: 'space-between'
+                            }}
+                        >
+                            <div
+                                className='filter-btn green'
+                                onClick={this.handleSubmit}
+                            >
+                                Apply Filters
+                            </div>
+                            <div
+                                className='filter-btn red'
+                                onClick={() => {
+                                    this.clearFilters();
                                 }}
                             >
-                                {this.state.filterMessage}
-                            </p>
-                        ) : null}
-                        <div className='filter-btn' onClick={this.handleSubmit}>
-                            Use Filter
+                                Clear
+                            </div>
                         </div>
-
                         <div>
                             <p
+                                className='btn-close'
                                 onClick={() => {
                                     this.props.setFilterActive(false);
                                 }}
                                 style={{
-                                    color: 'rgb(238, 238, 238)',
                                     position: 'absolute',
                                     left: '0',
                                     right: '0',
@@ -145,12 +149,17 @@ const mapStateToProps = state => ({
     filterActive: state.movies.filterActive,
     filters: state.movies.filters,
     text: state.movies.text,
-    movies: state.movies.movies
+    movies: state.movies.movies,
+    loading: state.movies.loading
 });
 
 export default withRouter(
-    connect(
-        mapStateToProps,
-        { searchMovie, setFilters, setLoading, fetchMovies, setFilterActive }
-    )(Filter)
+    connect(mapStateToProps, {
+        searchMovie,
+        setFilters,
+        setLoading,
+        fetchMovies,
+        setFilterActive,
+        setReset
+    })(Filter)
 );

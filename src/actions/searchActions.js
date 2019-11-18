@@ -9,14 +9,15 @@ import {
     PATHNAME,
     FILTERACTIVE,
     MOVIEACTIVE,
-    SET_FILTERS
+    SET_FILTERS,
+    RESET_FILTERS
 } from './types';
 import axios from 'axios';
 
 // import { APIKey } from '../APIKey';
 const apiURL =
     process.env.NODE_ENV === 'development'
-        ? 'http://localhost:1448/'
+        ? 'http://localhost:1447/'
         : 'https://movie-api.jespernyhlenjs.me/';
 
 export const searchMovie = text => dispatch => {
@@ -42,7 +43,7 @@ export const resetMovie = () => dispatch => {
 export const fetchMovies = (text, id, filters) => dispatch => {
     let query = text || ' ';
     let pageId = id || 1;
-    let url = `${apiURL}movies?search=${query}&page=${pageId}&per_page=24`;
+    let url = `${apiURL}movies?search=${query}&page=${pageId}&per_page=27`;
     if (text) {
         if (filters && filters.yearFilter.length) {
             url =
@@ -116,8 +117,12 @@ export const fetchMovie = id => dispatch => {
 // };
 
 export const fetchLatest = id => dispatch => {
+    console.log('fetch');
+
     axios
-        .get(`${apiURL}movies?latest=true&page=${id}&per_page=24`)
+        .get(
+            `${apiURL}movies?latest=true&page=${id}&per_page=27&year_min=1980&year_max=2020`
+        )
         .then(response => {
             dispatch({
                 type: FETCH_LATEST,
@@ -158,6 +163,13 @@ export const setFirstload = () => {
 export const setFilterActive = active => {
     return {
         type: FILTERACTIVE,
+        payload: active
+    };
+};
+
+export const setReset = active => {
+    return {
+        type: RESET_FILTERS,
         payload: active
     };
 };

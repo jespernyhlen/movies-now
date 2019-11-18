@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import './Pagination.css';
@@ -138,4 +138,4 @@ const mapStateToProps = state => ({
     page: state.movies.page
 });
 
-export default connect(mapStateToProps)(Pagination);
+export default withRouter(connect(mapStateToProps)(Pagination));

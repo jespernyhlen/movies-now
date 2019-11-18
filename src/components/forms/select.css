@@ -46,3 +46,9 @@
 .css-26l3qy-menu {
     z-index: 900;
 }
+
+@media (max-width: 600px) {
+    .form-label {
+        font-size: 1em !important;
+    }
+}

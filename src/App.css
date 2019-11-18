@@ -43,51 +43,6 @@ a:hover {
     text-decoration: none;
 }
 
-.movie-row {
-    box-shadow: 0 1px 40px rgba(27, 6, 65, 0.1);
-    padding: 2em 1em;
-    background: rgba(255, 255, 255, 0.03);
-    margin-left: -12px;
-    border-radius: 5px;
-    width: 100%;
-}
-
-.movie-row div {
-    margin: auto 0px;
-}
-
-.movie-desc {
-    font-size: 1.6em;
-    font-weight: 300;
-    line-height: 1.3em;
-}
-
-.movie-icon {
-    font-weight: 300;
-    font-size: 1.3em;
-}
-
-.movie-back-btn {
-    box-shadow: none !important;
-    text-align: start;
-    padding-left: 0;
-    font-size: 1.6em;
-    color: #f8f9fa;
-    transition: 0.3s all;
-}
-
-.movie-imdb-link {
-    text-decoration: underline;
-    font-weight: 400;
-    color: #f8f9fa;
-    transition: 0.3s all;
-}
-
-.movie-back-btn:hover,
-.movie-imdb-link:hover {
-    color: #f8f9fa63 !important;
-}
-
 .inline-heading h1,
 .inline-heading h4 {
     display: inline;
@@ -168,11 +123,13 @@ input.form-control:focus {
     margin-left: 3px;
     letter-spacing: 1px;
     text-transform: uppercase;
+    transition: 0.2s all;
 }
 
 .search-btn:hover {
     color: rgba(227, 227, 227, 0.85) !important;
-    background: #cb1a239e;
+
+    background: #f90f1c8f;
 }
 
 .search-btn:focus {
@@ -267,14 +224,14 @@ input.form-control:focus {
     top: 50%;
     margin-top: -20px;
     position: absolute;
-    z-index: 19 !important;
+    z-index: 20 !important;
     animation: loading-bar-spinner 300ms linear infinite;
 }
 
 #loading-bar-spinner.spinner .spinner-icon {
     width: 40px;
     height: 40px;
-    border: solid 5px transparent;
+    border: solid 3px transparent;
     border-top-color: #00c8b1 !important;
     border-left-color: #00c8b1 !important;
     border-radius: 50%;
@@ -291,24 +248,52 @@ input.form-control:focus {
     }
 }
 
-@media (min-width: 992px) {
-    .col-lg-2 {
-        -ms-flex: 0 0 12.4966667%;
-        flex: 0 0 12.4966667%;
-        max-width: 12.4966667%;
-    }
-    #movies .col-md-3 .well {
-        height: 390px;
-    }
-
-    #movies .col-md-3 img {
-        height: 240px;
-    }
-}
-
 @media (max-width: 660px) {
     h1 .center-container {
         position: initial;
         width: auto;
+    }
+}
+
+.Fade {
+    animation: FadeAnim;
+
+    animation-duration: 0.6s;
+
+    animation-delay: 0.2s;
+
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    animation-fill-mode: forwards;
+
+    opacity: 0;
+}
+
+.Show {
+    animation: ShowAnim;
+
+    animation-duration: 0.4s;
+
+    animation-delay: 0.1s;
+
+    animation-fill-mode: forwards;
+    transition: 0.4s all;
+}
+
+@keyframes ShowAnim {
+    0% {
+        transform: translateY(-6em);
+    }
+    100% {
+        transform: translateY(0em);
+    }
+}
+
+@keyframes FadeAnim {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }

@@ -17,7 +17,26 @@ import store from './store';
 require('dotenv').config();
 
 class App extends Component {
+    state = {
+        loading: true
+    };
+
+    componentDidMount() {
+        // this simulates an async action, after which the component will render the content
+        demoAsyncCall().then(() => this.setState({ loading: false }));
+    }
+
     render() {
+        const { loading } = this.state;
+
+        if (loading) {
+            // if your component doesn't have to wait for an async action, remove this block
+            return (
+                <div id='loading-bar-spinner' className='spinner'>
+                    <div className='spinner-icon'></div>
+                </div>
+            ); // render null when app is not ready
+        }
         return (
             <Provider store={store}>
                 <Router>
@@ -39,6 +58,10 @@ class App extends Component {
             </Provider>
         );
     }
+}
+
+function demoAsyncCall() {
+    return new Promise(resolve => setTimeout(() => resolve(), 700));
 }
 
 export default App;

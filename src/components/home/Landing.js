@@ -19,7 +19,11 @@ class Landing extends Component {
         return (
             <div
                 className='container'
-                style={{ paddingBottom: '6em', maxWidth: '100vw' }}
+                style={{
+                    paddingBottom: '6em',
+                    paddingTop: '8em',
+                    maxWidth: '100vw'
+                }}
             >
                 <Filter />
                 <SearchForm id={this.props.match.params.id} />
@@ -35,7 +39,4 @@ const mapStateToProps = state => ({
     totalPages: state.movies.totalPages
 });
 
-export default connect(
-    mapStateToProps,
-    { setPathname }
-)(Landing);
+export default connect(mapStateToProps, { setPathname })(Landing);
