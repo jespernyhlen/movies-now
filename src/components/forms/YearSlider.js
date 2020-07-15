@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Slider, Rail, Handles, Tracks, Ticks } from 'react-compound-slider';
 import { SliderRail, Handle, Track, Tick } from './sliders'; // example render components - source below
@@ -9,7 +10,7 @@ import { setReset } from '../../actions/searchActions';
 const sliderStyle = {
     position: 'relative',
     width: '100%',
-    margin: '1em auto 0'
+    margin: '1em auto 0',
 };
 
 class YearSlider extends Component {
@@ -20,18 +21,18 @@ class YearSlider extends Component {
             domain: [1980, 2020],
             values: this.props.filters.yearFilter.length
                 ? this.props.filters.yearFilter
-                : [1980, 2020]
+                : [1980, 2020],
         };
     }
 
-    onUpdate = values => {
+    onUpdate = (values) => {
         this.setState({ values });
     };
 
     componentDidUpdate(prevProps) {
         if (this.props.resetFilters) {
             this.setState({
-                values: [1980, 2020]
+                values: [1980, 2020],
             });
             this.props.setReset(false);
         }
@@ -39,43 +40,19 @@ class YearSlider extends Component {
 
     render() {
         const {
-            state: { domain, values, reversed }
+            state: { domain, values, reversed },
         } = this;
         return (
             <React.Fragment>
-                <div
-                    id='yearslider'
-                    style={{
-                        height: 150,
-                        width: '100%',
-                        maxWidth: '700px',
-                        margin: '6em auto 0'
-                    }}
-                >
+                <SliderContainer id='yearslider'>
                     {' '}
-                    <label
-                        style={{
-                            color: '#ccc',
-                            fontWeight: '600',
-                            fontSize: '1.6em',
-                            marginBottom: '0'
-                        }}
-                    >
-                        Year
-                    </label>
-                    <div
-                        className='form-label'
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-around',
-                            color: '#ccc',
-                            fontSize: '1.2em',
-                            height: '1.8em'
-                        }}
-                    >
+                    <LabelContainer>
+                        <label>Year</label>
+                    </LabelContainer>
+                    <FormLabel className='form-label'>
                         <p>Min: {this.state.values[0]}</p>
                         <p>Max: {this.state.values[1]}</p>
-                    </div>
+                    </FormLabel>
                     <Slider
                         mode={2}
                         step={1}
@@ -83,7 +60,7 @@ class YearSlider extends Component {
                         reversed={reversed}
                         rootStyle={sliderStyle}
                         onUpdate={this.onUpdate}
-                        onChange={e => this.props.onChange(e, 'yearFilter')}
+                        onChange={(e) => this.props.onChange(e, 'yearFilter')}
                         values={values}
                     >
                         <Rail>
@@ -94,7 +71,7 @@ class YearSlider extends Component {
                         <Handles>
                             {({ handles, getHandleProps }) => (
                                 <div className='slider-handles'>
-                                    {handles.map(handle => (
+                                    {handles.map((handle) => (
                                         <Handle
                                             key={handle.id}
                                             handle={handle}
@@ -122,7 +99,7 @@ class YearSlider extends Component {
                         <Ticks count={10}>
                             {({ ticks }) => (
                                 <div className='slider-ticks'>
-                                    {ticks.map(tick => (
+                                    {ticks.map((tick) => (
                                         <Tick
                                             key={tick.id}
                                             tick={tick}
@@ -133,27 +110,44 @@ class YearSlider extends Component {
                             )}
                         </Ticks>
                     </Slider>
-                </div>
-                {/* <button
-                    onClick={e => {
-                        const timer = setTimeout(() => {
-                            this.resetSlider();
-
-                            this.props.resetSlider([1980, 2020], 'yearFilter');
-                        }, 50);
-                    }}
-                    style={{ margin: '4em' }}
-                >
-                    Reset back to 0, 25
-                </button> */}
+                </SliderContainer>
             </React.Fragment>
         );
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     filters: state.movies.filters,
-    resetFilters: state.movies.resetFilters
+    resetFilters: state.movies.resetFilters,
 });
 
 export default withRouter(connect(mapStateToProps, { setReset })(YearSlider));
+
+const LabelContainer = styled.div`
+    color: #ccc;
+    font-weight: 600;
+    font-size: 1.6em;
+    @media only screen and (max-width: 790px) {
+        font-size: 1.2em !important;
+    }
+`;
+
+const FormLabel = styled.div`
+    display: flex;
+    justify-content: space-around;
+    color: #ccc;
+    font-size: 1.2em;
+    height: 1.8em;
+`;
+
+const SliderContainer = styled.div`
+    height: 150;
+    width: 100%;
+    max-width: 700px;
+    margin: 5em auto 5em !important;
+
+    @media only screen and (max-width: 600px) {
+        width: 85% !important;
+        margin: 2em auto 5em !important;
+    }
+`;

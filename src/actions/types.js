@@ -1,9 +1,10 @@
 export const SEARCH_MOVIE = 'SEARCH_MOVIE';
-export const FETCH_MOVIES = 'FETCH_MOVIES';
+export const SEARCH_MOVIES = 'SEARCH_MOVIES';
 export const FETCH_MOVIE = 'FETCH_MOVIE';
 export const RESET_MOVIE = 'RESET_MOVIE';
 
-export const FETCH_LATEST = 'FETCH_LATEST';
+export const FETCH_TRENDING = 'FETCH_TRENDING';
+export const FILTER_MOVIES = 'FILTER_MOVIES';
 
 export const LOADING = 'LOADING';
 export const FIRSTLOAD = 'FIRSTLOAD';

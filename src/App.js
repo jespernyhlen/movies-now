@@ -4,13 +4,15 @@ import {
     HashRouter as Router,
     Route,
     Redirect,
-    Switch
+    Switch,
 } from 'react-router-dom';
 import './App.css';
 
 import NavBar from './components/layout/NavBar';
 import Footer from './components/layout/Footer';
-import Landing from './components/home/Landing';
+import Trending from './components/home/Trending';
+import Search from './components/home/Search';
+import MoviesFilter from './components/home/MoviesFilter';
 import Movie from './components/home/Movie';
 
 import store from './store';
@@ -18,7 +20,7 @@ require('dotenv').config();
 
 class App extends Component {
     state = {
-        loading: true
+        loading: true,
     };
 
     componentDidMount() {
@@ -43,14 +45,26 @@ class App extends Component {
                     <NavBar />
                     <Switch>
                         <Route exact path='/'>
-                            <Redirect from='/' to='/latest/1' />
+                            <Redirect from='/' to='/trending/1' />
                         </Route>
-                        <Route exact path='/latest/:page' component={Landing} />
-                        <Route exact path='/search/:id' component={Landing} />
-
+                        <Route
+                            exact
+                            path='/trending/:page'
+                            component={Trending}
+                        />
+                        <Route
+                            exact
+                            path='/search/:query/:page'
+                            component={Search}
+                        />
+                        <Route
+                            exact
+                            path='/filtermovies/:page'
+                            component={MoviesFilter}
+                        />
                         <Route exact path='/movie/:id' component={Movie} />
                         <Route path='/'>
-                            <Redirect from='/' to='/latest' />
+                            <Redirect from='/' to='/trending/1' />
                         </Route>
                     </Switch>
                     <Footer />
@@ -61,7 +75,7 @@ class App extends Component {
 }
 
 function demoAsyncCall() {
-    return new Promise(resolve => setTimeout(() => resolve(), 700));
+    return new Promise((resolve) => setTimeout(() => resolve(), 700));
 }
 
 export default App;

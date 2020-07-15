@@ -1,0 +1,27 @@
+.pagination-link.active h5 {
+    color: #e82830fa !important;
+}
+
+.pagination-link h5 {
+    color: #ddd !important;
+    padding: 0.4em;
+    width: 55px;
+}
+
+.pagination-link:hover h5 {
+    color: #aa181ffa !important;
+}
+
+.paginate-dots:hover h5,
+.paginate-dots:hover {
+    color: #ddd !important;
+    cursor: default;
+}
+
+@media (max-width: 600px) {
+    .pagination-link h5 {
+        width: auto;
+        min-width: 35px;
+        font-size: 1.1em;
+    }
+}

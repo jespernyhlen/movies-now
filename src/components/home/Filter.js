@@ -1,165 +1,230 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { withRouter, useHistory } from 'react-router-dom';
 import GenreSelect from './../forms/GenreSelect';
 import YearSlider from './../forms/YearSlider';
 import VoteSlider from './../forms/VoteSlider';
 
 import { connect } from 'react-redux';
-import './Filter.css';
 import {
-    searchMovie,
     setFilters,
-    fetchMovies,
+    filterMovies,
     setFilterActive,
     setLoading,
-    setReset
+    setReset,
 } from '../../actions/searchActions';
 
-class Filter extends Component {
-    constructor() {
-        super();
-        this.state = {
-            yearFilter: [],
-            voteFilter: [],
-            genreFilter: {}
+function Filter(props) {
+    const history = useHistory();
+    const [yearFilter, setYearFilter] = useState([]);
+    const [voteFilter, setVoteFilter] = useState([]);
+    const [genreFilter, setGenreFilter] = useState({});
+
+    useEffect(() => {
+        setYearFilter(props.filters.yearFilter);
+        setVoteFilter(props.filters.voteFilter);
+        setGenreFilter(props.filters.genreFilter);
+        return () => {};
+    }, []);
+
+    let handleSubmit = (e) => {
+        let currentFilters = {
+            yearFilter: yearFilter,
+            voteFilter: voteFilter,
+            genreFilter: genreFilter,
         };
-    }
+        props.setFilters(currentFilters);
+        props.filterMovies(1, currentFilters);
 
-    handleSubmit = e => {
-        this.props.setFilters(this.state);
-        // console.log(this.state);
-        this.props.fetchMovies(this.state.text, 1, this.state);
-        this.setState(this.state);
-        if (!this.props.text) {
-            this.props.searchMovie(' ');
-        }
-        this.props.history.push('/search/1');
-        this.props.setLoading();
-        this.props.setFilterActive(false);
+        history.push('/filtermovies/1');
+        props.setLoading();
+        props.setFilterActive(false);
     };
 
-    handleChange = (e, type) => {
-        this.setState({
-            [type]: e
-        });
+    let handleYearChange = (e) => {
+        setYearFilter(e);
+        console.log(e);
     };
 
-    componentDidMount() {
-        this.setState({
-            yearFilter: this.props.filters.yearFilter,
-            voteFilter: this.props.filters.voteFilter,
-            genreFilter: this.props.filters.genreFilter
-        });
-    }
+    let handleVoteChange = (e) => {
+        setVoteFilter(e);
+        console.log(e);
+    };
 
-    clearFilters() {
-        this.props.setReset(true);
-        this.props.setFilters({
+    let handleGenreChange = (e) => {
+        setGenreFilter(e);
+        console.log(e);
+    };
+
+    let clearFilters = () => {
+        props.setReset(true);
+        props.setFilters({
             yearFilter: [],
             voteFilter: [],
-            genreFilter: {}
+            genreFilter: {},
         });
-        this.setState({ state: this.state });
-    }
+    };
 
-    render() {
-        const { filterActive } = this.props;
+    return (
+        <FilterContainer
+            className={`filter-container jumbotron jumbotron-fluid text-center ${
+                props.filterActive === true ? 'filter-active' : ''
+            }`}
+        >
+            {' '}
+            <ContainerCenter>
+                <div style={{ width: '100%' }}>
+                    <HeaderText>Find movies based on these filters</HeaderText>
+                    <React.Fragment>
+                        <YearSlider onChange={handleYearChange} />
+                        <VoteSlider onChange={handleVoteChange} />
+                        <GenreSelect onChange={handleGenreChange} />
+                    </React.Fragment>
 
-        return (
-            <div
-                className={`filter-container jumbotron jumbotron-fluid text-center ${
-                    filterActive === true ? 'filter-active' : ''
-                }`}
-            >
-                {' '}
-                <div className='row center-filter'>
-                    <div style={{ width: '100%' }}>
-                        <p
-                            className='center-filter-header'
-                            style={{
-                                color: 'rgb(238, 238, 238)',
-                                position: 'absolute',
-                                left: '0',
-                                right: '0',
-                                fontSize: '1.8em',
-                                fontWeight: '300',
-                                letterSpacing: '1px'
+                    <ButtonsContainer>
+                        <Button green onClick={handleSubmit}>
+                            Apply Filters
+                        </Button>
+                        <Button red onClick={clearFilters}>
+                            Clear
+                        </Button>
+                    </ButtonsContainer>
+                    <div>
+                        <ButtonClose
+                            onClick={() => {
+                                props.setFilterActive(false);
                             }}
                         >
-                            Apply filters to limit your next search
-                        </p>
-                        <React.Fragment>
-                            <YearSlider onChange={this.handleChange} />
-                            <VoteSlider onChange={this.handleChange} />
-                            <GenreSelect onChange={this.handleChange} />
-                        </React.Fragment>
-
-                        <div
-                            className='filter-btn-container'
-                            style={{
-                                maxWidth: '700px',
-                                margin: '0 auto',
-                                display: 'flex',
-                                justifyContent: 'space-between'
-                            }}
-                        >
-                            <div
-                                className='filter-btn green'
-                                onClick={this.handleSubmit}
-                            >
-                                Apply Filters
-                            </div>
-                            <div
-                                className='filter-btn red'
-                                onClick={() => {
-                                    this.clearFilters();
-                                }}
-                            >
-                                Clear
-                            </div>
-                        </div>
-                        <div>
-                            <p
-                                className='btn-close'
-                                onClick={() => {
-                                    this.props.setFilterActive(false);
-                                }}
-                                style={{
-                                    position: 'absolute',
-                                    left: '0',
-                                    right: '0',
-                                    fontSize: '1.2em',
-                                    fontWeight: '300',
-                                    letterSpacing: '0.5px',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                Close
-                            </p>
-                        </div>
+                            Close
+                        </ButtonClose>
                     </div>
                 </div>
-            </div>
-        );
-    }
+            </ContainerCenter>
+        </FilterContainer>
+    );
 }
 
-const mapStateToProps = state => ({
-    pathname: state.movies.pathname,
+const mapStateToProps = (state) => ({
     filterActive: state.movies.filterActive,
     filters: state.movies.filters,
-    text: state.movies.text,
-    movies: state.movies.movies,
-    loading: state.movies.loading
+    loading: state.movies.loading,
 });
 
 export default withRouter(
     connect(mapStateToProps, {
-        searchMovie,
         setFilters,
         setLoading,
-        fetchMovies,
+        filterMovies,
         setFilterActive,
-        setReset
+        setReset,
     })(Filter)
 );
+
+const ButtonsContainer = styled.div`
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+
+    @media only screen and (max-width: 790px) {
+        width: 90%;
+    }
+`;
+
+const FilterContainer = styled.div`
+    background: #000000f0;
+    height: 100vh;
+    width: 100%;
+    padding: 5em 15px 2em;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    top: -110vh;
+    transition: 0.5s all ease-in-out;
+    margin-bottom: 0.75em;
+    z-index: 800;
+    position: fixed;
+
+    @media only screen and (max-width: 600px) {
+        overflow: scroll;
+    }
+`;
+
+const ContainerCenter = styled.div`
+    position: absolute;
+    height: 100vh;
+    max-width: 1440px;
+    top: -4em;
+    place-items: center center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    transition: 0.6s all ease-in-out;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 0.9em;
+        top: 0;
+    }
+`;
+
+const HeaderText = styled.div`
+    color: rgb(238, 238, 238);
+    font-size: 1.8em;
+    font-weight: 300;
+    letter-spacing: 1px;
+
+    @media only screen and (max-width: 790px) {
+        font-size: 1.3em !important;
+        top: 2.5em;
+    }
+`;
+
+const Button = styled.div`
+    font-size: 1.5em;
+    font-weight: 400;
+    border: 0;
+    border-radius: 5px;
+    padding: 0.5em 0.75em 0.5em;
+    letter-spacing: 1px;
+    width: 10em;
+    cursor: pointer;
+    margin: 2em 0;
+    transition: 0.3s all;
+    border: 2px solid ${(props) => (props.red ? '#c53a4285' : '#2dc95973')};
+    color: ${(props) => (props.red ? '#c53a42a1' : '#3cd7679c')} !important;
+
+    &:hover {
+        border: 2px solid ${(props) => (props.red ? '#c53a42cf' : '#2dc959bd')};
+        color: ${(props) => (props.red ? '#c53a42f7' : '#3cd767')} !important;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    @media only screen and (max-width: 790px) {
+        font-size: 1.2em;
+        width: 48%;
+        margin: 2.5em 0;
+    }
+`;
+
+const ButtonClose = styled.p`
+    color: #ccc;
+    position: absolute;
+    left: 0;
+    right: 0;
+    font-size: 1.2em;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+
+    &:hover {
+        color: #fff;
+    }
+`;

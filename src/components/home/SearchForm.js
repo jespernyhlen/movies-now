@@ -1,182 +1,192 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
 import {
     searchMovie,
-    fetchMovies,
-    fetchLatest,
     setLoading,
     setFirstload,
-    setFilters
+    setFilters,
+    setFilterActive,
 } from '../../actions/searchActions';
 
-class SearchForm extends Component {
-    componentDidMount() {
-        this.props.setFirstload();
-        if (!this.props.firstload) {
-            this.fetchLatest(this.props.match.params.page);
+function SearchForm(props) {
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const capitalize = (s) => {
+        if (typeof s !== 'string') return '';
+        return s.charAt(0).toUpperCase() + s.slice(1);
+    };
+
+    let onChange = (e) => {
+        setSearchQuery(e.target.value);
+        if (e.target.value === '') {
+            props.searchMovie(' ');
+            props.searchMovie(searchQuery);
         }
-    }
-    componentDidUpdate(prevProps) {
-        let path = this.props.location.pathname;
-        let prevPath = prevProps.pathname;
+    };
 
-        let pathSplit = this.props.location.pathname.split('/');
-        let currentPath = pathSplit[1];
+    let onClick = (e) => {
+        props.filterActive
+            ? props.setFilterActive(false)
+            : props.setFilterActive(true);
+    };
 
-        switch (currentPath) {
-            case 'latest':
-                if (path !== prevPath && prevPath !== '') {
-                    this.fetchLatest(this.props.match.params.page);
-                    this.props.setLoading();
-                }
+    let onSubmit = (e) => {
+        e.preventDefault();
+        props.setLoading();
+        props.history.push(`/search/${searchQuery}/1`);
+    };
 
-                break;
-            case 'search':
-                // this.props.setLoading();
-                if (!this.props.text) {
-                    this.fetchLatest(this.props.match.params.page);
-                    this.props.history.push('/latest/1');
-                }
-
-                //  else {
-                this.props.fetchMovies(
-                    this.props.text,
-                    this.props.id,
-                    this.props.filters
-                );
-                this.props.setLoading();
-                // }
-                break;
-
-            default:
-                return null;
-        }
-    }
-
-    fetchLatest(id) {
-        this.props.fetchLatest(id);
-        this.props.setLoading();
-    }
-
-    render() {
-        return (
-            <div
-            // className='jumbotron jumbotron-fluid mt-2 text-center'
-            // style={{ background: 'none' }}
-            ></div>
-        );
-    }
+    return (
+        <SearchFormContainer onSubmit={onSubmit} autoComplete='off'>
+            {' '}
+            <FilterButton onClick={onClick} className='text-light'>
+                <i className='fas fa-angle-down'></i> {capitalize('filter')}
+            </FilterButton>
+            <FormInput
+                type='text'
+                className='form-control'
+                value={searchQuery}
+                name='searchText'
+                placeholder='Search Movies, TV Series ...'
+                onChange={onChange}
+            />
+            <SearchButton type='submit' className='search-btn'>
+                <i className='fa fa-search' />
+            </SearchButton>
+        </SearchFormContainer>
+    );
 }
 
-const mapStateToProps = state => ({
-    text: state.movies.text,
+const mapStateToProps = (state) => ({
+    query: state.movies.query,
     firstload: state.movies.firstload,
     filterActive: state.movies.filterActive,
     pathname: state.movies.pathname,
-    filters: state.movies.filters
+    filters: state.movies.filters,
 });
 
 export default withRouter(
     connect(mapStateToProps, {
         searchMovie,
-        fetchMovies,
-        fetchLatest,
         setLoading,
         setFirstload,
-        setFilters
+        setFilters,
+        setFilterActive,
     })(SearchForm)
 );
 
-// import React, { Component } from 'react';
-// import { withRouter } from 'react-router-dom';
+const SearchFormContainer = styled.form`
+    display: flex;
+    justify-content: flex-end;
+    top: 0.72em;
+    right: 0;
+    left: 0;
+    max-width: 1620px;
+    z-index: 200;
+    margin: 0 auto;
+    padding: 0 0 0 15px;
 
-// import { connect } from 'react-redux';
+    @media only screen and (max-width: 790px) {
+        display: flex;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.96);
+        right: 0;
+        left: 0;
+        position: absolute;
+        height: 3.6em;
+        padding: 0.5em;
+        top: 0;
+    }
+`;
 
-// import {
-//     searchMovie,
-//     fetchMovies,
-//     fetchLatest,
-//     setLoading,
-//     setFirstload
-// } from '../../actions/searchActions';
+const FormInput = styled.input`
+    border: 0 !important;
+    z-index: 200;
+    color: #aaa;
+    border-radius: 0;
+    font-size: 1.4em;
+    background: rgba(187, 193, 191, 0.27);
+    width: 320px;
+    max-width: 410px;
 
-// class SearchForm extends Component {
-//     componentDidMount() {
-//         this.props.setFirstload();
-//         if (
-//             !this.props.firstload ||
-//             this.props.location.pathname.substring(1, 7) === 'latest'
-//         ) {
-//             this.fetchLatest(this.props.match.params.page);
-//             this.props.setLoading();
-//         }
-//     }
+    &:focus {
+        border: 0;
+        z-index: 200;
+        background: #bbc1bf45;
+        border-radius: 0;
+        color: #aaa;
+        box-shadow: 0 1px 20px rgba(0, 0, 0, 0.04);
+        border: 2px solid #555;
+        outline: 0;
+    }
+    @media only screen and (max-width: 790px) {
+        height: 2.4em;
+        font-size: 1.1em !important;
+    }
+`;
 
-//     componentDidUpdate(prevProps) {
-//         let path = this.props.location.pathname;
-//         let prevPath = prevProps.pathname;
+const FilterButton = styled.div`
+    color: rgba(255, 255, 255, 0.77) !important;
+    font-size: 1.3em;
+    font-weight: 400;
+    border: 0;
+    border-radius: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    padding: 0.4em 1.4em 0.22em;
+    margin-right: 4px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: 0.2s all;
 
-//         let pathSplit = this.props.location.pathname.split('/');
-//         let currentPath = pathSplit[1];
+    &:hover {
+        color: #fff !important;
+    }
 
-//         switch (currentPath) {
-//             case 'latest':
-//                 if (path !== prevPath) {
-//                     this.fetchLatest(this.props.match.params.page);
-//                     this.props.setLoading();
-//                 }
-//                 break;
-//             case 'search':
-//                 // console.log(prevProps.text);
-//                 console.log(this.props);
+    @media only screen and (max-width: 790px) {
+        font-size: 1.1em;
+        padding: 0.4em 0.5em 0.22em 0.5em;
+        display: flex;
+        line-height: 1.65em;
 
-//                 if (prevProps !== prevPath && this.props.text) {
-//                     this.props.fetchMovies(this.props.text, this.props.id);
-//                     this.props.setLoading();
-//                 } else if (path !== prevPath && !this.props.text) {
-//                     this.props.history.push('/latest/1');
-//                 }
-//                 break;
+        i {
+            padding: 0.5em 0.5em 0 0;
+        }
+    }
+`;
 
-//             default:
-//                 return null;
-//         }
-//     }
+const SearchButton = styled.button`
+    background: #f90f1c73;
+    color: rgba(255, 255, 255, 0.77) !important;
+    font-size: 1.5em;
+    font-weight: 400;
+    border: 0;
+    border-radius: 0;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    padding: 0.18em 0.75em 0.22em;
+    margin-left: 3px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: 0.2s all;
 
-//     fetchLatest(id) {
-//         this.props.fetchLatest(id);
-//         this.props.setLoading();
-//     }
+    @media only screen and (max-width: 790px) {
+        font-size: 1.2em;
+        padding: 0em 1em 0em;
+        height: 2.2em;
+    }
 
-//     render() {
-//         return (
-//             <div
-//                 className='jumbotron jumbotron-fluid mt-2 text-center'
-//                 style={{ background: 'none' }}
-//             >
-//                 <div className='container'>
-//                     <h1 className='display-4 mb-3 font-weight-extra-light text-light-transp-2'>
-//                         <i className='fa fa-search' /> Search for movies, TV
-//                         series..
-//                     </h1>
-//                 </div>
-//             </div>
-//         );
-//     }
-// }
+    &:hover {
+        color: rgba(227, 227, 227, 0.85) !important;
 
-// const mapStateToProps = state => ({
-//     text: state.movies.text,
-//     firstload: state.movies.firstload,
-//     pathname: state.movies.pathname
-// });
+        background: #f90f1c8f;
+    }
 
-// export default withRouter(
-//     connect(
-//         mapStateToProps,
-//         { searchMovie, fetchMovies, fetchLatest, setLoading, setFirstload }
-//     )(SearchForm)
-// );
+    &:focus {
+        outline: none;
+    }
+`;

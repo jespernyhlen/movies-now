@@ -1,20 +1,21 @@
 import {
     SEARCH_MOVIE,
-    FETCH_MOVIES,
+    SEARCH_MOVIES,
     FETCH_MOVIE,
     RESET_MOVIE,
-    FETCH_LATEST,
+    FETCH_TRENDING,
+    FILTER_MOVIES,
     LOADING,
     FIRSTLOAD,
     PATHNAME,
     FILTERACTIVE,
     MOVIEACTIVE,
     SET_FILTERS,
-    RESET_FILTERS
+    RESET_FILTERS,
 } from '../actions/types';
 
 const initialState = {
-    text: '',
+    query: '',
     movies: [],
     loading: false,
     firstload: false,
@@ -26,81 +27,89 @@ const initialState = {
     filters: {
         yearFilter: [],
         voteFilter: [],
-        genreFilter: {}
+        genreFilter: {},
     },
-    resetFilters: false
+    resetFilters: false,
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
     switch (action.type) {
         case SEARCH_MOVIE:
             return {
                 ...state,
-                text: action.payload,
-                loading: false
+                query: action.payload,
+                loading: false,
             };
-        case FETCH_MOVIES:
+        case SEARCH_MOVIES:
             return {
                 ...state,
-                movies: action.payload.data,
-                totalPages: action.payload.totalpages,
-                page: action.payload.currentpage,
-                loading: false
+                movies: action.payload.results,
+                totalPages: action.payload.total_pages,
+                page: action.payload.page,
+                loading: false,
+            };
+        case FILTER_MOVIES:
+            return {
+                ...state,
+                movies: action.payload.results,
+                totalPages: action.payload.total_pages,
+                page: action.payload.page,
+                loading: false,
             };
         case FETCH_MOVIE:
             return {
                 ...state,
-                movie: action.payload.data,
-                loading: false
+                movie: action.payload,
+                loading: false,
             };
         case RESET_MOVIE:
             return {
                 ...state,
-                movie: []
+                movie: [],
             };
-        case FETCH_LATEST:
+        case FETCH_TRENDING:
             return {
                 ...state,
-                movies: action.payload.data,
-                totalPages: action.payload.totalpages,
-                page: action.payload.currentpage,
-                loading: false
+                movies: action.payload.results,
+                totalPages: action.payload.total_pages,
+                page: action.payload.page,
+                loading: false,
             };
         case SET_FILTERS:
             return {
                 ...state,
                 filters: action.payload,
-                loading: false
+                loading: false,
             };
         case LOADING:
             return {
                 ...state,
-                loading: true
+                loading: true,
             };
         case FIRSTLOAD:
             return {
                 ...state,
-                firstload: true
+                firstload: true,
             };
         case PATHNAME:
             return {
                 ...state,
-                pathname: action.payload
+                pathname: action.payload,
             };
         case RESET_FILTERS:
             return {
                 ...state,
-                resetFilters: action.payload
+                resetFilters: action.payload,
             };
         case FILTERACTIVE:
             return {
                 ...state,
-                filterActive: action.payload
+                filterActive: action.payload,
             };
         case MOVIEACTIVE:
             return {
                 ...state,
-                movieActive: action.payload
+                movieActive: action.payload,
             };
         default:
             return state;

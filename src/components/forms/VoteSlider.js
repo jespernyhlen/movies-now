@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Slider, Rail, Handles, Tracks, Ticks } from 'react-compound-slider';
 import { SliderRail, Handle, Track, Tick } from './sliders'; // example render components - source below
@@ -9,7 +10,7 @@ import { setReset } from '../../actions/searchActions';
 const sliderStyle = {
     position: 'relative',
     width: '100%',
-    margin: '1em auto 0'
+    margin: '1em auto 0',
 };
 
 class VoteSlider extends Component {
@@ -19,18 +20,18 @@ class VoteSlider extends Component {
             domain: [0, 10],
             values: this.props.filters.voteFilter.length
                 ? this.props.filters.voteFilter
-                : [0, 10]
+                : [0, 10],
         };
     }
 
-    onUpdate = values => {
+    onUpdate = (values) => {
         this.setState({ values });
     };
 
     componentDidUpdate() {
         if (this.props.resetFilters) {
             this.setState({
-                values: [0, 10]
+                values: [0, 10],
             });
             this.props.setReset(false);
         }
@@ -38,42 +39,19 @@ class VoteSlider extends Component {
 
     render() {
         const {
-            state: { domain, values, reversed }
+            state: { domain, values, reversed },
         } = this;
         return (
             <React.Fragment>
-                <div
-                    id='voteslider'
-                    style={{
-                        height: 150,
-                        width: '100%',
-                        maxWidth: '700px',
-                        margin: '2em auto 0'
-                    }}
-                >
-                    <label
-                        style={{
-                            color: '#ccc',
-                            fontWeight: '600',
-                            fontSize: '1.6em',
-                            marginBottom: '0'
-                        }}
-                    >
-                        Rating
-                    </label>
-                    <div
-                        className='form-label'
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-around',
-                            color: '#ccc',
-                            fontSize: '1.2em',
-                            height: '1.8em'
-                        }}
-                    >
+                <SliderContainer id='voteslider' style={{}}>
+                    <LabelContainer>
+                        <label>Rating</label>
+                    </LabelContainer>
+
+                    <FormLabel>
                         <p>Min: {this.state.values[0]}</p>
                         <p>Max: {this.state.values[1]}</p>
-                    </div>
+                    </FormLabel>
                     <Slider
                         mode={2}
                         step={1}
@@ -81,7 +59,7 @@ class VoteSlider extends Component {
                         reversed={reversed}
                         rootStyle={sliderStyle}
                         onUpdate={this.onUpdate}
-                        onChange={e => this.props.onChange(e, 'voteFilter')}
+                        onChange={(e) => this.props.onChange(e, 'voteFilter')}
                         values={values}
                     >
                         <Rail>
@@ -92,7 +70,7 @@ class VoteSlider extends Component {
                         <Handles>
                             {({ handles, getHandleProps }) => (
                                 <div className='slider-handles'>
-                                    {handles.map(handle => (
+                                    {handles.map((handle) => (
                                         <Handle
                                             key={handle.id}
                                             handle={handle}
@@ -120,7 +98,7 @@ class VoteSlider extends Component {
                         <Ticks count={10}>
                             {({ ticks }) => (
                                 <div className='slider-ticks'>
-                                    {ticks.map(tick => (
+                                    {ticks.map((tick) => (
                                         <Tick
                                             key={tick.id}
                                             tick={tick}
@@ -131,27 +109,44 @@ class VoteSlider extends Component {
                             )}
                         </Ticks>
                     </Slider>
-                </div>
-                {/* <button
-                    onClick={e => {
-                        const timer = setTimeout(() => {
-                            this.resetSlider();
-
-                            this.props.resetSlider([0, 10], 'voteFilter');
-                        }, 50);
-                    }}
-                    style={{ margin: '4em' }}
-                >
-                    Reset back to 0, 25
-                </button> */}
+                </SliderContainer>
             </React.Fragment>
         );
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     filters: state.movies.filters,
-    resetFilters: state.movies.resetFilters
+    resetFilters: state.movies.resetFilters,
 });
 
 export default withRouter(connect(mapStateToProps, { setReset })(VoteSlider));
+
+const LabelContainer = styled.div`
+    color: #ccc;
+    font-weight: 600;
+    font-size: 1.6em;
+    @media only screen and (max-width: 790px) {
+        font-size: 1.2em !important;
+    }
+`;
+
+const FormLabel = styled.div`
+    display: flex;
+    justify-content: space-around;
+    color: #ccc;
+    font-size: 1.2em;
+    height: 1.8em;
+`;
+
+const SliderContainer = styled.div`
+    height: 150;
+    width: 100%;
+    max-width: 700px;
+    margin: 5em auto 5em !important;
+
+    @media only screen and (max-width: 600px) {
+        width: 85% !important;
+        margin: 2em auto 5em !important;
+    }
+`;

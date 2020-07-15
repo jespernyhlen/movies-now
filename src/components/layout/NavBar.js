@@ -1,243 +1,96 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import './NavBar.css';
+import SearchForm from '../home/SearchForm';
 
 import { connect } from 'react-redux';
-
-import {
-    searchMovie,
-    fetchMovies,
-    setLoading,
-    setFilterActive
-} from '../../actions/searchActions';
-const capitalize = s => {
-    if (typeof s !== 'string') return '';
-    return s.charAt(0).toUpperCase() + s.slice(1);
-};
 
 class NavBar extends Component {
     constructor() {
         super();
         this.state = {
-            text: ''
+            query: '',
         };
     }
-    onChange = e => {
-        this.setState({
-            text: e.target.value
-        });
-        if (e.target.value === '') {
-            this.props.searchMovie(' ');
-            this.props.searchMovie(this.state.text);
-        }
-    };
-
-    onSubmit = e => {
-        e.preventDefault();
-        if (e.target.value === '') {
-            this.props.searchMovie(' ');
-        } else {
-            this.props.searchMovie(this.state.text);
-        }
-        this.props.setLoading();
-        if (this.props.location.pathname !== '/search/1') {
-            this.props.history.push('/search/1');
-        }
-    };
 
     render() {
-        const { filterActive, movieActive } = this.props;
+        const { movieActive } = this.props;
 
-        const onClick = e => {
-            filterActive
-                ? this.props.setFilterActive(false)
-                : this.props.setFilterActive(true);
-        };
         return (
-            <nav
-                className={movieActive ? 'navbar mb-5 hide-bar' : 'navbar mb-5'}
+            <Navigation
+                className={movieActive ? 'mb-5 hide-bar' : 'navbar mb-5'}
             >
-                <div style={{ maxWidth: '100vw' }} className='container'>
-                    <div className='navbar-header'>
+                <div
+                    style={{ maxWidth: '100vw', display: 'flex' }}
+                    className='container'
+                >
+                    <NavLogoContainer>
                         <Link
-                            className='navbar-brand text-light-transp-2 text-lg brand-text'
-                            to='/latest/1'
+                            className='navbar-brand text-light-transp-2 text-lg'
+                            to='/trending/1'
                         >
-                            <i className='fas fa-film text-light-transp-2 nav-logo'></i>
+                            <NavLogo className='fas fa-film text-light-transp-2 nav-logo'></NavLogo>
                             MOVIES
                         </Link>
-                    </div>
+                    </NavLogoContainer>
                     <ul className='navbar-nav ml-auto text-light d-inline-block'>
                         <li className='nav-item d-inline-block'>
-                            <form
-                                id='searchForm'
-                                onSubmit={this.onSubmit}
-                                autoComplete='off'
-                            >
-                                {' '}
-                                <div
-                                    onClick={onClick}
-                                    className='text-light movies-filter-btn'
-                                >
-                                    <i className='fas fa-angle-down'></i>{' '}
-                                    {capitalize('filter')}
-                                </div>
-                                <input
-                                    type='text'
-                                    className='form-control'
-                                    value={this.state.text}
-                                    name='searchText'
-                                    placeholder='Search Movies, TV Series ...'
-                                    onChange={this.onChange}
-                                />
-                                <button type='submit' className='search-btn'>
-                                    <i className='fa fa-search' />
-                                </button>
-                            </form>
+                            <SearchForm />
                         </li>
                     </ul>
                 </div>
-            </nav>
+            </Navigation>
         );
     }
 }
 
-const mapStateToProps = state => ({
-    filterActive: state.movies.filterActive,
+const mapStateToProps = (state) => ({
     movieActive: state.movies.movieActive,
     filters: state.movies.filters,
-    text: state.movies.text
 });
 
-export default withRouter(
-    connect(
-        mapStateToProps,
-        {
-            searchMovie,
-            fetchMovies,
-            setLoading,
-            setFilterActive
-        }
-    )(NavBar)
-);
+export default withRouter(connect(mapStateToProps, {})(NavBar));
 
-// import React, { Component } from 'react';
-// import { withRouter } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
-// import './NavBar.css';
-// import SearchForm from '../../components/home/SearchForm';
+const Navigation = styled.nav`
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.48);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 800;
+    transform: translateY(0em);
+    transition: 0.3s all;
 
-// import { connect } from 'react-redux';
+    &:hover {
+        background: rgba(0, 0, 0, 0.95) !important;
+    }
+`;
 
-// import {
-//     searchMovie,
-//     fetchMovies,
-//     fetchLatest,
-//     setLoading,
-//     setFirstload,
-//     setFilterActive
-// } from '../../actions/searchActions';
-// const capitalize = s => {
-//     if (typeof s !== 'string') return '';
-//     return s.charAt(0).toUpperCase() + s.slice(1);
-// };
+const NavLogo = styled.i`
+    font-size: 1em;
+    margin-right: 0.5em;
+`;
 
-// class NavBar extends Component {
-//     onChange = e => {
-//         this.props.searchMovie(e.target.value);
-//     };
+const NavLogoContainer = styled.div`
+    margin-top: -2px;
+    margin-bottom: -3.5px;
 
-//     onSubmit = e => {
-//         e.preventDefault();
+    a,
+    i {
+        transition: 0.3s all;
+    }
 
-//         this.props.fetchMovies(this.props.text, this.props.id);
-//         this.props.setLoading();
-//         this.props.history.push('/search/1');
-//     };
+    &:hover a,
+    :hover i {
+        color: #fff;
+    }
 
-//     render() {
-//         const { filterActive } = this.props;
-
-//         const onClick = e => {
-//             filterActive
-//                 ? this.props.setFilterActive(false)
-//                 : this.props.setFilterActive(true);
-//         };
-//         return (
-//             <nav className='navbar bg-transparent mb-5'>
-//                 <div className='container'>
-//                     <div className='navbar-header'>
-//                         <i className='fas fa-film text-light-transp-2 nav-logo'></i>
-//                         <Link
-//                             className='navbar-brand text-light-transp-2 text-lg brand-text'
-//                             to='/latest/1'
-//                         >
-//                             MOVIES
-//                         </Link>
-//                     </div>
-//                     <ul className='navbar-nav ml-auto text-light d-inline-block'>
-//                         <li className='nav-item d-inline-block'>
-//                             {/* <img
-//                                 src='https://p7.hiclipart.com/preview/940/445/158/ticket-film-cinema-cinema-ticket-thumbnail.jpg'
-//                                 alt='nav-logo'
-//                                 style={{
-//                                     width: '100px',
-//                                     height: '100px'
-//                                 }}
-//                             /> */}
-//                             {/* <i class='fas fa-chevron-down text-light-transp-2 nav-logo'></i>
-//                             <Link
-//                                 className='navbar-brand text-light-transp-2 text-lg brand-text'
-//                                 to='/latest/1'
-//                             >
-//                                 Filter
-//                             </Link> */}
-
-//                             <form
-//                                 id='searchForm'
-//                                 onSubmit={this.onSubmit}
-//                                 autoComplete='off'
-//                             >
-//                                 {' '}
-//                                 <div
-//                                     onClick={onClick}
-//                                     className='text-light movies-filter-btn'
-//                                 >
-//                                     <i className='fas fa-angle-down'></i>{' '}
-//                                     {capitalize('filter')}
-//                                 </div>
-//                                 <input
-//                                     type='text'
-//                                     className='form-control'
-//                                     name='searchText'
-//                                     placeholder='Search Movies, TV Series ...'
-//                                     onChange={this.onChange}
-//                                 />
-//                                 <button type='submit' className='search-btn'>
-//                                     <i className='fa fa-search' />
-//                                 </button>
-//                             </form>
-//                         </li>
-//                     </ul>
-//                 </div>
-//             </nav>
-//         );
-//     }
-// }
-
-// const mapStateToProps = state => ({
-//     filterActive: state.movies.filterActive
-// });
-
-// export default withRouter(
-//     connect(
-//         mapStateToProps,
-//         {
-//             searchMovie,
-//             fetchMovies,
-//             setLoading,
-//             setFilterActive
-//         }
-//     )(NavBar)
-// );
+    @media only screen and (max-width: 790px) {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: 6em;
+    }
+`;

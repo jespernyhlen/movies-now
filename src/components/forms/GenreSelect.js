@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import Select from 'react-select';
 import { connect } from 'react-redux';
@@ -9,26 +10,26 @@ import { setReset } from '../../actions/searchActions';
 class GenreSelect extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             select: {
-                value: this.props.filters.genreFilter.length
+                value: this.props.filters.genreFilter.label
                     ? this.props.filters.genreFilter
                     : options[0], // "One" as initial value for react-select
-                options // all available options
-            }
+                options, // all available options
+            },
         };
     }
-    setValue = value => {
-        this.setState(prevState => ({
+    setValue = (value) => {
+        this.setState((prevState) => ({
             select: {
-                ...prevState.select,
-                value
-            }
+                value,
+                options,
+            },
         }));
     };
-    handleChange = value => {
+    handleChange = (value) => {
         this.setValue(value);
+        console.log(this.state);
     };
 
     componentDidUpdate() {
@@ -41,135 +42,144 @@ class GenreSelect extends Component {
         const { select } = this.state;
 
         let colourStyles = {
-            control: styles => ({ ...styles, backgroundColor: 'white' }),
+            control: (styles) => ({ ...styles, backgroundColor: 'white' }),
             option: (styles, { isDisabled, isFocused }) => {
                 return {
                     ...styles,
                     backgroundColor: isFocused ? '#eee' : '#fff',
                     color: '#222',
                     cursor: isDisabled ? 'not-allowed' : 'default',
-                    textAlign: 'left'
+                    textAlign: 'left',
                 };
-            }
+            },
         };
         return (
             <div
                 id='genre-select'
                 style={{ maxWidth: '700px', margin: '2em auto 0' }}
             >
-                <label
-                    style={{
-                        color: '#ccc',
-                        fontWeight: '600',
-                        fontSize: '1.6em',
-                        marginBottom: '1em'
-                    }}
-                >
-                    Genre
-                </label>
-
-                <Select
-                    styles={colourStyles}
-                    className='genre-select'
-                    value={select.value}
-                    options={select.options}
-                    onChange={e => {
-                        this.handleChange(e);
-                        this.props.onChange(e, 'genreFilter');
-                    }}
-                />
-                <div></div>
+                <LabelContainer>
+                    <label>Genre</label>
+                </LabelContainer>
+                <SelectContainer>
+                    <Select
+                        styles={colourStyles}
+                        className='genre-select'
+                        value={select.value}
+                        options={select.options}
+                        onChange={(e) => {
+                            this.handleChange(e);
+                            this.props.onChange(e, 'genreFilter');
+                        }}
+                    />
+                </SelectContainer>
             </div>
         );
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     filters: state.movies.filters,
-    resetFilters: state.movies.resetFilters
+    resetFilters: state.movies.resetFilters,
 });
 
 export default withRouter(connect(mapStateToProps, { setReset })(GenreSelect));
 
+const LabelContainer = styled.div`
+    color: #ccc;
+    font-weight: 600;
+    font-size: 1.6em;
+    @media only screen and (max-width: 790px) {
+        font-size: 1.2em !important;
+    }
+`;
+
+const SelectContainer = styled.div`
+    @media only screen and (max-width: 790px) {
+        width: 90%;
+        margin: 0 auto;
+    }
+`;
+
 const options = [
     {
         type: '',
-        label: 'All'
+        label: 'All',
     },
     {
         type: 28,
-        label: 'Action'
+        label: 'Action',
     },
     {
         type: 12,
-        label: 'Adventure'
+        label: 'Adventure',
     },
     {
         type: 16,
-        label: 'Animation'
+        label: 'Animation',
     },
     {
         type: 35,
-        label: 'Comedy'
+        label: 'Comedy',
     },
     {
         type: 80,
-        label: 'Crime'
+        label: 'Crime',
     },
     {
         type: 99,
-        label: 'Documentary'
+        label: 'Documentary',
     },
     {
         type: 18,
-        label: 'Drama'
+        label: 'Drama',
     },
     {
         type: 10751,
-        label: 'Family'
+        label: 'Family',
     },
     {
         type: 14,
-        label: 'Fantasy'
+        label: 'Fantasy',
     },
     {
         type: 36,
-        label: 'History'
+        label: 'History',
     },
     {
         type: 27,
-        label: 'Horror'
+        label: 'Horror',
     },
     {
         type: 10402,
-        label: 'Music'
+        label: 'Music',
     },
     {
         type: 9648,
-        label: 'Mystery'
+        label: 'Mystery',
     },
     {
         type: 10749,
-        label: 'Romance'
+        label: 'Romance',
     },
     {
         type: 878,
-        label: 'Science Fiction'
+        label: 'Science Fiction',
     },
     {
         type: 10770,
-        label: 'TV Movie'
+        label: 'TV Movie',
     },
     {
         type: 53,
-        label: 'Thriller'
+        label: 'Thriller',
     },
     {
         type: 10752,
-        label: 'War'
+        label: 'War',
     },
     {
         type: 37,
-        label: 'Western'
-    }
+        label: 'Western',
+    },
 ];

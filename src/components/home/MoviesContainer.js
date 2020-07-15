@@ -1,72 +1,87 @@
-import React, { Component } from 'react';
-
+import React from 'react';
+import styled from 'styled-components';
 import { connect } from 'react-redux';
 import MovieCard from './MovieCard';
 
-class MoviesContainer extends Component {
-    componentDidUpdate() {
-        window.scrollTo(0, 0);
-    }
+function MoviesContainer({
+    movies,
+    loading,
+    pathName,
+    searchQuery,
+    filterActive,
+}) {
+    const capitalize = (s) => {
+        if (typeof s !== 'string') return '';
+        return s.charAt(0).toUpperCase() + s.slice(1);
+    };
 
-    render() {
-        const { movies, loading, pathname, filterActive } = this.props;
-
-        const capitalize = s => {
-            if (typeof s !== 'string') return '';
-            return s.charAt(0).toUpperCase() + s.slice(1);
-        };
-
-        let pathSplit = pathname.split('/');
-        let currentPath = pathSplit[1];
-        // console.log(currentPath);
-        return (
-            <React.Fragment>
-                <div className='movie-bg-container '>
-                    <img
-                        id='main-background'
-                        src='
-                        https://images.unsplash.com/photo-1462651567147-aa679fd1cfaf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1700&q=60'
-                        className='movies-bg-img'
-                        alt='background'
-                    />
+    return (
+        <React.Fragment>
+            {loading ? (
+                <div id='loading-bar-spinner' className='spinner'>
+                    <div className='spinner-icon'></div>
                 </div>
-                <div style={{ padding: '0 1vw' }} className='row'>
-                    <div className='text-light mb-3 movies-category'>
-                        {loading ? null : (
-                            <div>
-                                <i className='fas fa-angle-right'></i>{' '}
-                                {capitalize(currentPath)}
-                            </div>
-                        )}
+            ) : null}
+
+            <div style={{ padding: '0 1vw' }} className='row'>
+                <MovieCategory className='text-light mb-3'>
+                    {loading ? null : (
+                        <SiteTitle>
+                            <i className='fas fa-angle-right'></i>{' '}
+                            {capitalize(pathName)}
+                            {searchQuery ? ' - "' + searchQuery + '"' : null}
+                        </SiteTitle>
+                    )}
+                </MovieCategory>
+            </div>
+
+            <div className='movies-bg'></div>
+
+            <div
+                style={{ padding: '0 1vw' }}
+                className={`movies-row row ${
+                    filterActive ? 'filter-active-blur' : ''
+                }`}
+            >
+                {!movies.length & !loading ? (
+                    <div
+                        style={{
+                            textAlign: 'center',
+                            margin: '0 auto',
+                            color: '#ccc',
+                        }}
+                    >
+                        <h5>No movies found.....</h5>
                     </div>
-                </div>
-
-                <div className='movies-bg'></div>
-
-                <div
-                    style={{ padding: '0 1vw' }}
-                    className={`movies-row row ${
-                        filterActive ? 'filter-active-blur' : ''
-                    }`}
-                >
-                    {!loading
-                        ? movies.map((movie, index) =>
-                              movie.poster_path ? (
-                                  <MovieCard key={index + 1} movie={movie} />
-                              ) : null
-                          )
-                        : null}
-                </div>
-            </React.Fragment>
-        );
-    }
+                ) : !loading ? (
+                    movies.map((movie, index) =>
+                        movie.poster_path ? (
+                            <MovieCard key={index + 1} movie={movie} />
+                        ) : null
+                    )
+                ) : null}
+            </div>
+        </React.Fragment>
+    );
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     movies: state.movies.movies,
     loading: state.movies.loading,
     pathname: state.movies.pathname,
-    filters: state.movies.filters
+    filters: state.movies.filters,
 });
 
 export default connect(mapStateToProps)(MoviesContainer);
+
+const MovieCategory = styled.div`
+    font-size: 2em;
+    letter-spacing: 1px;
+    padding-bottom: 8px;
+    padding-left: 5px;
+`;
+
+const SiteTitle = styled.h2`
+    font-size: 24px;
+    font-weight: 300;
+`;
